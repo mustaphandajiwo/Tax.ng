@@ -1,0 +1,79 @@
+# Obligations that follow from activities, for any kind of taxpayer
+# (format: _format.yaml). A category alone never triggers these: VAT and WHT
+# need business activity and the activity itself; PAYE needs employees.
+
+- id: paye.monthly_remittance
+  tax: pit
+  title: PAYE deduction and monthly remittance
+  frequency: monthly
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: secondary_source
+  applies_if: {fact: has_employees, eq: true, label: You employ staff}
+  due:
+    rule: day_of_following_month
+    day: 10
+    review_status: unverified
+  provision: ntaa2025.paye.remittance
+  evidence:
+    - Monthly payroll records showing gross pay and PAYE deducted
+    - Remittance receipts from the state tax authority
+    - Annual return of staff emoluments
+  guide: employees-2026
+  calculator: pit
+  specialism: paye
+
+- id: wht.monthly_remittance
+  tax: wht
+  title: Withholding tax deduction and monthly remittance
+  frequency: monthly
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: secondary_source
+  applies_if:
+    all:
+      - any:
+          - {fact: entity_type, in: [company, sole_proprietor, partnership, nonprofit], label: you run a business or organisation}
+          - {fact: has_business_income, eq: true, label: you have business income}
+      - {fact: makes_wht_payments, eq: true, label: you make payments that are subject to withholding tax}
+  due:
+    rule: day_of_following_month
+    day: 21
+    review_status: secondary_source
+    reference: https://taxsummaries.pwc.com/nigeria/corporate/withholding-taxes
+  provision: wht.regulations.remittance
+  evidence:
+    - Schedule of payments with withholding tax deducted, by payment type
+    - Remittance receipts
+    - Copies of credit notes issued to recipients
+  calculator: wht
+  specialism: wht
+
+- id: vat.monthly_return
+  tax: vat
+  title: VAT monthly return
+  frequency: monthly
+  valid_from: 2026-01-01
+  valid_to: null
+  # Whether small businesses must register and file is not confirmed.
+  review_status: unverified
+  applies_if:
+    all:
+      - any:
+          - {fact: entity_type, in: [company, sole_proprietor, partnership, nonprofit], label: you run a business or organisation}
+          - {fact: has_business_income, eq: true, label: you have business income}
+      - {fact: sells_taxable_supplies, eq: true, label: you make taxable supplies}
+      - {fact: annual_turnover, gt: {param: cit.small_company.turnover_ceiling}, label: your turnover is above the small business ceiling}
+  due:
+    rule: day_of_following_month
+    day: 21
+    review_status: unverified
+  provision: ntaa2025.vat.returns
+  evidence:
+    - VAT invoices issued for taxable supplies
+    - Purchase invoices supporting input VAT claimed
+    - Monthly VAT returns and payment receipts
+  note: Whether businesses at or below the small business ceiling must register for VAT is not yet confirmed.
+  guide: vat-basics
+  calculator: vat
+  specialism: vat

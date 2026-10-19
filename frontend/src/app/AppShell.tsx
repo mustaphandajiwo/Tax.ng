@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { api, type Meta } from "../api";
 import { Loading, Notice } from "../components/ui";
-import { ApiError, http } from "../http";
+import { http } from "../http";
 import { appModules } from "../modules/registry";
 import type { AppContext, AppRoute, Me } from "../modules/types";
 import { Link, match, useRoute } from "../router";
+import { AskAccount } from "./ask";
 import { Account, Dashboard, Staff } from "./core";
 import { Login } from "./Login";
 
@@ -32,6 +33,7 @@ function writeOrg(id: string | null): void {
 const CORE_ROUTES: AppRoute[] = [
   ["/", (ctx) => <Dashboard ctx={ctx} />],
   ["/account", (ctx) => <Account ctx={ctx} />],
+  ["/ask", (ctx) => <AskAccount ctx={ctx} />],
   ["/staff", (ctx) => <Staff ctx={ctx} />],
 ];
 const ROUTES: AppRoute[] = [...CORE_ROUTES, ...appModules.flatMap((m) => m.routes)];
@@ -59,10 +61,10 @@ export function AppShell() {
 
   const refreshMe = useCallback(async () => {
     try {
-      setMe(await http.get<Me>("/api/me"));
-    } catch (err) {
-      if (err instanceof ApiError && err.status === 401) setMe(null);
-      else setError("Could not load your account.");
+      const s = await http.get<{ signed_in: boolean; me?: Me }>("/api/session");
+      setMe(s.signed_in && s.me ? s.me : null);
+    } catch {
+      setError("Could not load your account.");
     }
   }, []);
 

@@ -3,7 +3,9 @@
 Modules live in ``taxng/modules/<name>/``. At startup each module package is
 imported; if it defines ``init(services)`` that is called (to register
 adapters, hooks or analytics events), and its ``routes`` submodule is imported
-so its ``@route`` handlers register. See docs/MODULES.md.
+so its ``@route`` handlers register. After every module has started, each
+module's optional ``post_init(services)`` runs for cross-module wiring.
+See docs/MODULES.md.
 """
 
 from __future__ import annotations
@@ -108,11 +110,21 @@ def build_services(
         content_dir=content_dir,
     )
 
+    # Core routes first, then every module (init -> routes), then post_init once
+    # all modules exist, for cross-module wiring such as payment handlers.
+    importlib.import_module("taxng.api.handlers")
     importlib.import_module("taxng.platform.routes")
+    loaded = []
     for name in module_names():
         module = importlib.import_module(f"{MODULES_PACKAGE}.{name}")
         init = getattr(module, "init", None)
         if callable(init):
             init(services)
         importlib.import_module(f"{MODULES_PACKAGE}.{name}.routes")
+        loaded.append(module)
+    for module in loaded:
+        post_init = getattr(module, "post_init", None)
+        if callable(post_init):
+            post_init(services)
+    importlib.import_module("taxng.ai.account_routes")
     return services

@@ -1,0 +1,184 @@
+# ERP export mapping profiles (EINV-03, Annex A9).
+#
+# Each profile maps the columns of a typical sales-invoice export to tax.ng
+# e-invoice fields. One row is one invoice line; rows sharing the external_id
+# column form one invoice. Column headings vary by version and by how each
+# client configures its export, so every mapping is marked unverified until
+# checked against a real export from that client.
+#
+# status: sandbox means file import only. Live sync from the ERP needs
+# licensed API access (see live_sync) and is not built in the demo.
+#
+# Field keys: external_id, invoice_number, issue_date, due_date, buyer_name,
+# buyer_tin, description, quantity, unit_price, vat_category, invoice_total.
+profiles:
+  taxng:
+    label: tax.ng standard CSV
+    status: sandbox
+    mapping_status: reference
+    live_sync: null
+    fill_down: false
+    date_formats: ["%Y-%m-%d"]
+    columns:
+      external_id: external_id
+      invoice_number: invoice_number
+      issue_date: issue_date
+      due_date: due_date
+      buyer_name: buyer_name
+      buyer_tin: buyer_tin
+      description: description
+      quantity: quantity
+      unit_price: unit_price
+      vat_category: vat_category
+      invoice_total: invoice_total
+    vat_codes:
+      standard: standard
+      zero_rated: zero_rated
+      exempt: exempt
+
+  quickbooks:
+    label: QuickBooks Online (invoice import or export CSV)
+    status: sandbox
+    mapping_status: unverified
+    live_sync: Needs an Intuit developer app (OAuth 2.0, Accounting API) licensed for production and the client's authorisation.
+    fill_down: false
+    date_formats: ["%d/%m/%Y", "%m/%d/%Y", "%Y-%m-%d"]
+    columns:
+      external_id: InvoiceNo
+      invoice_number: InvoiceNo
+      issue_date: InvoiceDate
+      due_date: DueDate
+      buyer_name: Customer
+      buyer_tin: Customer TIN
+      description: ItemDescription
+      quantity: ItemQuantity
+      unit_price: ItemRate
+      vat_category: ItemTaxCode
+      invoice_total: InvoiceTotal
+    vat_codes:
+      VAT: standard
+      Standard: standard
+      Zero-rated: zero_rated
+      Zero: zero_rated
+      Exempt: exempt
+
+  sage:
+    label: Sage Business Cloud Accounting or Sage 50 (sales invoice export)
+    status: sandbox
+    mapping_status: unverified
+    live_sync: Needs Sage Developer programme access (Sage Business Cloud API) and the client's authorisation.
+    fill_down: false
+    date_formats: ["%d/%m/%Y", "%Y-%m-%d"]
+    columns:
+      external_id: Invoice Number
+      invoice_number: Invoice Number
+      issue_date: Date
+      due_date: Due Date
+      buyer_name: Customer Name
+      buyer_tin: Customer Tax ID
+      description: Description
+      quantity: Quantity
+      unit_price: Unit Price
+      vat_category: Tax Rate Name
+      invoice_total: Invoice Total
+    vat_codes:
+      Standard: standard
+      Zero Rated: zero_rated
+      Exempt: exempt
+
+  odoo:
+    label: Odoo (Accounting, customer invoices export)
+    status: sandbox
+    mapping_status: unverified
+    live_sync: Needs Odoo external API (XML-RPC or JSON-RPC) credentials for the client's database.
+    # Odoo exports leave invoice-level columns blank on the second and later line of an invoice.
+    fill_down: true
+    date_formats: ["%Y-%m-%d", "%d/%m/%Y"]
+    columns:
+      external_id: Number
+      invoice_number: Number
+      issue_date: Invoice/Bill Date
+      due_date: Due Date
+      buyer_name: Partner
+      buyer_tin: Partner/Tax ID
+      description: Invoice lines/Label
+      quantity: Invoice lines/Quantity
+      unit_price: Invoice lines/Unit Price
+      vat_category: Invoice lines/Taxes
+      invoice_total: Total
+    vat_codes:
+      VAT Sales: standard
+      Zero rated: zero_rated
+      Exempt: exempt
+
+  dynamics:
+    label: Microsoft Dynamics 365 Business Central (posted sales invoices)
+    status: sandbox
+    mapping_status: unverified
+    live_sync: Needs a Microsoft Entra app registration with Business Central API permissions and the client's consent.
+    fill_down: false
+    date_formats: ["%d/%m/%Y", "%m/%d/%Y", "%Y-%m-%d"]
+    columns:
+      external_id: No.
+      invoice_number: No.
+      issue_date: Posting Date
+      due_date: Due Date
+      buyer_name: Sell-to Customer Name
+      buyer_tin: VAT Registration No.
+      description: Description
+      quantity: Quantity
+      unit_price: Unit Price Excl. VAT
+      vat_category: VAT Prod. Posting Group
+      invoice_total: Amount Including VAT
+    vat_codes:
+      STANDARD: standard
+      ZERO: zero_rated
+      EXEMPT: exempt
+
+  sap:
+    label: SAP S/4HANA (billing documents export)
+    status: sandbox
+    mapping_status: unverified
+    live_sync: Needs SAP API Business Hub or OData service access on the client's S/4HANA system and an SAP licence for integration users.
+    fill_down: false
+    date_formats: ["%d.%m.%Y", "%Y-%m-%d"]
+    columns:
+      external_id: Billing Document
+      invoice_number: Billing Document
+      issue_date: Billing Date
+      due_date: Net Due Date
+      buyer_name: Payer Name
+      buyer_tin: Tax Number 1
+      description: Item Description
+      quantity: Billed Quantity
+      unit_price: Net Price
+      vat_category: Tax Classification
+      invoice_total: Gross Value
+    vat_codes:
+      "1": standard
+      "0": exempt
+      Z: zero_rated
+
+  oracle:
+    label: Oracle Fusion Cloud Receivables (transactions export)
+    status: sandbox
+    mapping_status: unverified
+    live_sync: Needs Oracle Fusion REST API access with an integration user and the client's authorisation.
+    fill_down: false
+    date_formats: ["%Y-%m-%d", "%d-%b-%Y", "%d/%m/%Y"]
+    columns:
+      external_id: Transaction Number
+      invoice_number: Transaction Number
+      issue_date: Transaction Date
+      due_date: Due Date
+      buyer_name: Bill-to Customer Name
+      buyer_tin: Bill-to Taxpayer ID
+      description: Line Description
+      quantity: Quantity
+      unit_price: Unit Selling Price
+      vat_category: Tax Classification Code
+      invoice_total: Transaction Total
+    vat_codes:
+      NG VAT STANDARD: standard
+      NG VAT ZERO: zero_rated
+      NG VAT EXEMPT: exempt

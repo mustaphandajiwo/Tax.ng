@@ -1,0 +1,14 @@
+# Igbo. DRAFT strings only, written by engineering for reviewer triage. None
+# is served until a staff reviewer approves a submission.
+lang: ig
+name: Igbo
+native_name: Asụsụ Igbo
+note: Draft strings proposed by engineering. Not reviewed by a native speaker.
+strings:
+  nav.news: {text: Akụkọ Ụtụ Isi, status: draft}
+  nav.ask: {text: Jụọ Tax AI, status: draft}
+  nav.about: {text: Maka Anyị, status: draft}
+  nav.languages: {text: Asụsụ, status: draft}
+  button.sign_in: {text: Banye, status: draft}
+  button.send: {text: Zipu, status: draft}
+  label.language: {text: Asụsụ, status: draft}

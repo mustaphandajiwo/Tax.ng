@@ -1,0 +1,79 @@
+# Capital gains under the Nigeria Tax Act 2025 (disposals from 1 January 2026), CALC-06.
+# Figures transcribed from PwC Worldwide Tax Summaries (secondary source).
+# Companies' gains are taxed at the prevailing CIT rate: this file points at the
+# CIT parameter by name instead of repeating the rate, so the two cannot drift.
+description: Capital gains, Nigeria Tax Act 2025
+metadata:
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/corporate/income-determination
+
+company:
+  metadata:
+    provision: nta2025.cgt.companies
+  rate_parameter:
+    description: Rule that sets the rate on a company's chargeable gains (the prevailing CIT rate)
+    values:
+      2026-01-01: {value: cit.rate.other}
+  small_company_rate_applies:
+    description: Small companies' chargeable gains are taxed at the small company CIT rate
+    metadata:
+      provision: nta2025.cgt.small_company
+      # Not confirmed: the small company exemption may not extend to gains.
+      review_status: unverified
+    values:
+      2026-01-01: {value: true}
+  small_rate_parameter:
+    description: Rule that sets the rate on a small company's chargeable gains, where the exemption extends to gains
+    metadata:
+      provision: nta2025.cgt.small_company
+      review_status: unverified
+    values:
+      2026-01-01: {value: cit.rate.small}
+
+share_exemption:
+  metadata:
+    provision: nta2025.cgt.share_exemption
+  proceeds_ceiling:
+    description: Maximum disposal proceeds from shares in any twelve-month period for the share exemption
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 150000000}
+  gain_ceiling:
+    description: Maximum chargeable gains on shares in any twelve-month period for the share exemption
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 10000000}
+  window_months:
+    description: Length of the period over which share disposals are added together, in months
+    metadata: {unit: months}
+    values:
+      2026-01-01: {value: 12}
+
+individual:
+  metadata:
+    provision: nta2025.cgt.individuals
+    # Gains are added to chargeable income and taxed at PIT rates. Not confirmed.
+    review_status: unverified
+    reference: https://taxsummaries.pwc.com/nigeria/individual
+  scale_parameter:
+    description: Scale that taxes an individual's gains (gain added to chargeable income)
+    values:
+      2026-01-01: {value: pit.nta2025.rates}
+  chattel_exemption:
+    metadata:
+      provision: nta2025.cgt.chattels
+    fixed_ceiling:
+      description: Fixed amount up to which a disposal of personal chattels is exempt
+      metadata: {unit: currency-NGN}
+      values:
+        2026-01-01: {value: 5000000}
+    minimum_wage_multiple:
+      description: Multiple of the annual national minimum wage up to which a disposal of personal chattels is exempt
+      metadata: {unit: times}
+      values:
+        2026-01-01: {value: 3}
+    national_minimum_wage_monthly:
+      description: National minimum wage per month, used for the personal chattels exemption
+      metadata: {unit: currency-NGN}
+      values:
+        2026-01-01: {value: 70000}

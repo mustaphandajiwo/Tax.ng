@@ -1,0 +1,37 @@
+# Source catalogue for public UI chrome (CH-04). English is complete and is
+# always served. Other catalogues propose drafts; nothing in them is served
+# until a reviewer approves a submission (see /staff/translations).
+lang: en
+name: English
+native_name: English
+strings:
+  nav.reform: New Tax Law 2026
+  nav.calculators: Calculators
+  nav.health-check: Check My Tax Health
+  nav.advisers: Find an Adviser
+  nav.laws: Laws & Regulations
+  nav.news: Tax News
+  nav.ask: Ask Tax AI
+  nav.academy: Academy
+  nav.file-pay: File & Pay
+  nav.newsletter: Newsletter
+  nav.about: About & Ownership
+  nav.languages: Languages
+  nav.whatsapp: tax.ng on WhatsApp
+  button.sign_in: Sign in
+  button.sign_out: Sign out
+  button.menu: Menu
+  button.skip: Skip to content
+  button.calculate: Calculate
+  button.ask: Ask a question
+  button.enrol: Enrol
+  button.open_calculator: Open the calculator
+  button.send: Send
+  label.language: Language
+  label.review_status: Review status
+  label.source: Source
+  disclaimer.demo: Demo build. Rules come from secondary sources and are pending legal sign-off. Not for real tax decisions.
+  disclaimer.not_authority: tax.ng is not a tax authority and does not act for one. Content is general information, not tax advice.
+  disclaimer.ai: General information from the approved legal library, not tax advice. Figures come from the tax.ng rules engine.
+  disclaimer.translation: This page is a reviewed translation. If it differs from the English version, the English version applies.
+  footer.owner: tax.ng is owned and licensed by Astound Innovation Hub.

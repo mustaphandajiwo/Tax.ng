@@ -1,0 +1,127 @@
+# Phase 2 legislative worked examples (CALC-06): capital gains and stamp duties.
+# Loaded by backend/tests/test_legislative.py with every other file in rules/tests.
+# Only numeric and true/false outputs are compared (the runner compares exact decimals).
+
+# --- Capital gains: companies --------------------------------------------------
+- name: CGT company that is not small pays the CIT rate on the gain
+  calculator: cgt
+  input:
+    taxpayer_type: company
+    disposal_date: "2026-04-01"
+    asset_type: land_buildings
+    proceeds: 80000000
+    cost: 50000000
+    allowable_expenses: 2000000
+    annual_turnover: 500000000
+    fixed_assets: 300000000
+  # gain = 80,000,000 - 50,000,000 - 2,000,000 = 28,000,000; 28,000,000 x 30% = 8,400,000
+  output: {chargeable_gain: "28000000.00", is_small_company: false, rate: "0.3", cgt: "8400000.00", exempt: false}
+
+- name: CGT small company gain at the small company rate (unverified)
+  calculator: cgt
+  input:
+    taxpayer_type: company
+    disposal_date: "2026-04-01"
+    asset_type: other
+    proceeds: 80000000
+    cost: 50000000
+    allowable_expenses: 2000000
+    annual_turnover: 80000000
+    fixed_assets: 50000000
+  # small company test met; small company rate (zero) applied pending review
+  output: {chargeable_gain: "28000000.00", is_small_company: true, cgt: "0.00"}
+
+- name: CGT share disposal within both ceilings is exempt
+  calculator: cgt
+  input:
+    taxpayer_type: company
+    disposal_date: "2026-04-01"
+    asset_type: shares
+    proceeds: 100000000
+    cost: 95000000
+    annual_turnover: 500000000
+    fixed_assets: 300000000
+  # proceeds 100m <= 150m and gain 5m <= 10m
+  output: {chargeable_gain: "5000000.00", exempt: true, cgt: "0.00"}
+
+- name: CGT share disposal above the proceeds ceiling is taxed
+  calculator: cgt
+  input:
+    taxpayer_type: company
+    disposal_date: "2026-04-01"
+    asset_type: shares
+    proceeds: 200000000
+    cost: 195000000
+    annual_turnover: 500000000
+    fixed_assets: 300000000
+  # proceeds 200m > 150m; 5,000,000 x 30% = 1,500,000
+  output: {exempt: false, cgt: "1500000.00"}
+
+- name: CGT earlier share disposals in the window count towards the ceiling
+  calculator: cgt
+  input:
+    taxpayer_type: company
+    disposal_date: "2026-04-01"
+    asset_type: shares
+    proceeds: 100000000
+    cost: 95000000
+    prior_share_proceeds_12m: 60000000
+    annual_turnover: 500000000
+    fixed_assets: 300000000
+  # window proceeds 160m > 150m, so not exempt; 5,000,000 x 30% = 1,500,000
+  output: {exempt: false, cgt: "1500000.00"}
+
+# --- Capital gains: individuals (PIT-rate treatment unverified) ----------------
+- name: CGT individual gain added to chargeable income
+  calculator: cgt
+  input:
+    taxpayer_type: individual
+    disposal_date: "2026-05-01"
+    asset_type: land_buildings
+    proceeds: 20000000
+    cost: 8000000
+    allowable_expenses: 2000000
+    other_chargeable_income: 3000000
+  # gain 10,000,000. PIT(3,000,000) = 330,000.
+  # PIT(13,000,000) = 330,000 + 9,000,000 x 18% + 1,000,000 x 21% = 2,160,000
+  # CGT = 2,160,000 - 330,000 = 1,830,000
+  output: {chargeable_gain: "10000000.00", tax_without_gain: "330000.00", tax_with_gain: "2160000.00", cgt: "1830000.00"}
+
+- name: CGT personal chattel within the exemption
+  calculator: cgt
+  input: {taxpayer_type: individual, disposal_date: "2026-05-01", asset_type: chattel, proceeds: 4000000, cost: 1000000}
+  # ceiling = max(5,000,000, 3 x 70,000 x 12 = 2,520,000) = 5,000,000; 4,000,000 <= 5,000,000
+  output: {exempt: true, cgt: "0.00"}
+
+- name: CGT personal chattel above the exemption
+  calculator: cgt
+  input: {taxpayer_type: individual, disposal_date: "2026-05-01", asset_type: chattel, proceeds: 6000000, cost: 2000000}
+  # gain 4,000,000 with no other income: 2,200,000 x 15% + 1,000,000 x 18% = 510,000
+  output: {exempt: false, chargeable_gain: "4000000.00", cgt: "510000.00"}
+
+- name: CGT loss gives no tax
+  calculator: cgt
+  input: {taxpayer_type: individual, disposal_date: "2026-05-01", asset_type: other, proceeds: 1000000, cost: 3000000}
+  output: {chargeable_gain: "0.00", cgt: "0.00"}
+
+# --- Stamp duties ----------------------------------------------------------------
+- name: Electronic transfer at the threshold attracts the levy
+  calculator: stamp-duty
+  input: {instrument: electronic_transfer, transaction_date: "2026-03-01", amount: 10000}
+  output: {duty: "50.00", exempt: false}
+
+- name: Electronic transfer below the threshold attracts nothing
+  calculator: stamp-duty
+  input: {instrument: electronic_transfer, transaction_date: "2026-03-01", amount: 9999.99}
+  output: {duty: "0.00", exempt: true}
+
+- name: Transfer between own accounts in the same bank is exempt
+  calculator: stamp-duty
+  input: {instrument: electronic_transfer, transaction_date: "2026-03-01", amount: 500000, own_account: true}
+  output: {duty: "0.00", exempt: true}
+
+- name: Share capital duty on authorised share capital
+  calculator: stamp-duty
+  input: {instrument: share_capital, transaction_date: "2026-03-01", amount: 10000000}
+  # 10,000,000 x 0.75% = 75,000
+  output: {duty: "75000.00", rate: "0.0075"}

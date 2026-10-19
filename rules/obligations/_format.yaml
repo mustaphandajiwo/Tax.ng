@@ -1,0 +1,31 @@
+# Obligation rules (HC-01, HC-02). This file documents the format and holds no rules.
+#
+# Each other file in this directory is a YAML list of obligation versions:
+#
+#   - id: paye.monthly_remittance        # stable id; several versions may share it
+#     tax: pit                           # pit | vat | wht | cit | cgt | stamp_duty
+#     title: ...
+#     frequency: monthly                 # monthly | annual (calendar periods)
+#     valid_from: 2026-01-01             # the version applies to periods starting on or after this date
+#     valid_to: null                     # exclusive; null = open-ended. Versions of one id must not overlap.
+#     review_status: unverified          # applicability rule status
+#     applies_if: <condition>            # see below; unknown facts give "undetermined", never "applies"
+#     due:
+#       rule: day_of_following_month     # or months_after_period_end (last day of that month)
+#       day: 21                          # for day_of_following_month
+#       months: 6                        # for months_after_period_end
+#       review_status: secondary_source  # due-date rule status, reported separately
+#       reference: https://...
+#     provision: wht.regulations.remittance   # must exist in the legal library
+#     evidence: [ ... ]                  # records a taxpayer should keep
+#     note: ...                          # optional caveat shown with the obligation
+#     guide / calculator / specialism    # optional links for reports and adviser matching
+#
+# Conditions (three-valued: true, false or unknown when a fact is missing or "unknown"):
+#   {all: [c, ...]}  {any: [c, ...]}  {not: c}
+#   {fact: name, eq: value} | ne | in: [..] | not_in: [..]
+#   {fact: name, gt|gte|lt|lte: number or {param: rules.parameter.name}}
+#   Any node may carry `label`, used to explain why an obligation applies.
+#   Thresholds always reference rule parameters by name; never write a figure here
+#   that already lives in rules/parameters.
+[]

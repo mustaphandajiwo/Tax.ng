@@ -1,0 +1,79 @@
+# Commercial plans for tax.ng (PRD section 9). Commercial services only:
+# tax.ng never holds or remits tax. Tax is paid to the tax authority directly.
+#
+# Prices are set after market validation. Every price below is a placeholder
+# [TBC] and carries price_status: placeholder until it is approved. The app
+# shows "Placeholder price, to be set after validation" for these.
+currency: NGN
+plans:
+  - id: workspace_starter
+    name: Business workspace, Starter
+    category: workspace
+    scope: org
+    interval: month
+    unit: per workspace
+    price_kobo: 1500000  # [TBC]
+    price_status: placeholder
+    features:
+      - One business workspace with returns, documents and approvals
+      - E-invoicing in sandbox, up to a modest monthly volume [TBC]
+      - Up to three team members [TBC]
+  - id: workspace_growth
+    name: Business workspace, Growth
+    category: workspace
+    scope: org
+    interval: month
+    unit: per workspace
+    price_kobo: 4500000  # [TBC]
+    price_status: placeholder
+    features:
+      - Everything in Starter
+      - ERP import connectors and reconciliation
+      - Webhooks and API access
+      - Up to ten team members [TBC]
+  - id: api_developer
+    name: API, Developer
+    category: api
+    scope: org
+    interval: month
+    unit: per organisation
+    price_kobo: 2000000  # [TBC]
+    price_status: placeholder
+    features:
+      - Calculators, rules parameters and e-invoice endpoints
+      - Sandbox keys with rate limiting
+      - Request quota to be set after validation [TBC]
+  - id: api_scale
+    name: API, Scale
+    category: api
+    scope: org
+    interval: month
+    unit: per organisation
+    price_kobo: 7500000  # [TBC]
+    price_status: placeholder
+    features:
+      - Higher request quota [TBC]
+      - Priority support
+  - id: institutional_seats
+    name: Institutional seats
+    category: institutional
+    scope: org
+    interval: year
+    unit: per seat
+    seats: true
+    price_kobo: 2500000  # [TBC]
+    price_status: placeholder
+    features:
+      - Named seats for firms, universities and public bodies
+      - Academy access for each seat
+  - id: personal_plus
+    name: Personal Plus
+    category: personal
+    scope: user
+    interval: month
+    unit: per person
+    price_kobo: 250000  # [TBC]
+    price_status: placeholder
+    features:
+      - Saved tax health checks and reminders
+      - Priority answers from the tax.ng team [TBC]

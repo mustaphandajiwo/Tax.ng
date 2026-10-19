@@ -1,0 +1,8 @@
+.billing-plans { margin-bottom: 8px; }
+@media (min-width: 960px) { .billing-plans { grid-template-columns: repeat(3, 1fr); } }
+.billing-plan { display: flex; flex-direction: column; gap: 6px; }
+.billing-plan ul { padding-left: 18px; margin: 4px 0 8px; flex: 1; }
+.billing-plan__price { font-size: 1.3rem; font-weight: 700; margin: 0; }
+.billing-receipt dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0 0 12px; }
+.billing-receipt dt { font-weight: 600; }
+.billing-receipt dd { margin: 0; }

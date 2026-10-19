@@ -4,6 +4,8 @@ import { api } from "../api";
 import { Figures } from "../components/Figures";
 import { Loading, Notice, ReviewBadge, useLoad } from "../components/ui";
 import { date } from "../format";
+import { http } from "../http";
+import { AdSlot } from "../modules/publishing/AdSlot";
 import { Link } from "../router";
 
 const CALC_PATH: Record<string, string> = {
@@ -12,6 +14,8 @@ const CALC_PATH: Record<string, string> = {
   cit: "/calculators/cit",
   vat: "/calculators/vat",
   wht: "/calculators/wht",
+  cgt: "/calculators/cgt",
+  "stamp-duty": "/calculators/stamp-duty",
 };
 
 export function Home() {
@@ -62,6 +66,8 @@ export function Home() {
         {guides.data ? <GuideList items={guides.data.items} /> : <Loading error={guides.error} />}
       </section>
 
+      <AdSlot slot="home_sidebar" page="/" />
+
       <section className="card ask-cta">
         <h2>Ask Tax AI</h2>
         <p>Ask a question in plain words. Answers cite the law, and every figure comes from the rules engine.</p>
@@ -101,8 +107,23 @@ export function Reform() {
   );
 }
 
+interface GuideTranslation {
+  lang: string;
+  name: string;
+  summary: string;
+}
+
 export function GuidePage({ id }: { id: string }) {
   const { data, error } = useLoad(() => api.guide(id), [id]);
+  // CH-04: reviewed summary translations, served only once approved.
+  const translations = useLoad(
+    () =>
+      http
+        .get<{ items: GuideTranslation[] }>(`/api/channels/guide-translations/${encodeURIComponent(id)}`)
+        .catch(() => ({ items: [] as GuideTranslation[] })),
+    [id],
+  );
+  const [lang, setLang] = useState("en");
   const end = useRef<HTMLDivElement>(null);
   const [sent, setSent] = useState(false);
 
@@ -127,7 +148,31 @@ export function GuidePage({ id }: { id: string }) {
         <Link to="/reform">New Tax Law 2026</Link>
       </p>
       <h1>{data.title}</h1>
-      <p className="lede">{data.summary}</p>
+      {translations.data && translations.data.items.length > 0 && (
+        <div className="tabs" role="tablist" aria-label="Summary language">
+          <button type="button" role="tab" aria-selected={lang === "en"} onClick={() => setLang("en")}>
+            English
+          </button>
+          {translations.data.items.map((t) => (
+            <button key={t.lang} type="button" role="tab" aria-selected={lang === t.lang} onClick={() => setLang(t.lang)}>
+              {t.name}
+            </button>
+          ))}
+        </div>
+      )}
+      {(() => {
+        const t = translations.data?.items.find((x) => x.lang === lang);
+        return t ? (
+          <>
+            <p className="lede" lang={t.lang}>
+              {t.summary}
+            </p>
+            <p className="muted small">Reviewed translation. If it differs from the English version, the English version applies.</p>
+          </>
+        ) : (
+          <p className="lede">{data.summary}</p>
+        );
+      })()}
       <p className="muted small">Applies from {date(data.applies_from)}</p>
       <div className="article__grid">
         <div>
@@ -268,11 +313,14 @@ export function News() {
   return (
     <>
       <h1>Tax news: Nigeria</h1>
+      <p className="small">
+        Also: <Link to="/news/africa">Africa</Link> · <Link to="/news/global">Global</Link>
+      </p>
       {!data ? (
         <Loading error={error} />
       ) : (
         <ul className="news">
-          {data.items.map((n) => (
+          {data.items.filter((n) => n.section === "nigeria").map((n) => (
             <li key={n.id} className="card">
               <p className="muted small">
                 {date(n.date)}

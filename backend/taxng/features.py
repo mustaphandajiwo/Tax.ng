@@ -44,10 +44,13 @@ FEATURES: list[Feature] = [
     Feature("contribute", "Contribute", "/contribute", 3, "footer"),
     Feature("advertise", "Advertise", "/advertise", 3, "footer"),
     Feature("developers", "Developers & API", "/developers", 4, "footer"),
+    Feature("whatsapp", "tax.ng on WhatsApp", "/whatsapp", 3, "footer"),
+    Feature("languages", "Languages", "/languages", 3, "footer"),
     Feature("about", "About & Ownership", "/about", 1, "footer"),
     # Signed-in app (served at /app)
     Feature("app-home", "Dashboard", "/", 2, "app"),
     Feature("app-compliance", "My tax health", "/compliance", 2, "app"),
+    Feature("app-ask", "Ask Tax AI", "/ask", 4, "app"),
     Feature("app-advisory", "Advisers & bookings", "/advisory", 2, "app"),
     Feature("app-workspaces", "Business workspaces", "/workspaces", 3, "app"),
     Feature("app-einvoicing", "E-invoicing", "/einvoicing", 3, "app"),
@@ -56,6 +59,8 @@ FEATURES: list[Feature] = [
     Feature("app-integrations", "Integrations & API", "/integrations", 4, "app"),
     Feature("app-academy", "My learning", "/learning", 3, "app"),
     Feature("app-publishing", "Publishing", "/publishing", 3, "app"),
+    Feature("app-channels", "Channels", "/channels", 3, "app", staff_only=True),
+    Feature("app-translations", "Translations", "/staff/translations", 3, "app", staff_only=True),
     Feature("app-staff", "Staff", "/staff", 1, "app", staff_only=True),
     Feature("app-account", "Account", "/account", 2, "app"),
 ]

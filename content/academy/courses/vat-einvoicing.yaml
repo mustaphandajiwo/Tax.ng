@@ -1,0 +1,219 @@
+# Starter course (ACAD-01). No figures in lesson text: values are rendered from
+# the rules engine through each lesson's `parameters` list.
+# The price below is a PLACEHOLDER [TBC], to be set after market validation.
+# It is used only for sandbox checkouts and is never shown as a real price.
+
+id: vat-einvoicing
+title: VAT and e-invoicing basics
+summary: Charging, recovering and accounting for VAT under the Nigeria Tax Act 2025, and how e-invoicing changes the invoice itself.
+level: Introductory
+audience: [small business owners, bookkeepers, finance teams]
+duration_hours: 3
+trainer: indirect-tax-faculty
+review_status: unverified
+review_note: VAT content is drafted from secondary sources. E-invoicing content reflects public guidance on the national e-invoicing rollout, which is still being phased in; details are unverified until a legal reviewer checks them.
+price:
+  model: paid
+  amount_kobo: 1500000   # [TBC] placeholder for sandbox checkout only
+  label: To be set after validation
+cohorts: []
+
+modules:
+  - id: m1
+    title: How VAT works
+    lessons:
+      - id: m1-l1
+        title: Output VAT, input VAT and the return
+        provisions: [nta2025.vat.rate]
+        parameters: [vat.standard_rate]
+        body:
+          - VAT is charged by a registered supplier on taxable supplies of goods and services. The VAT the supplier charges customers is output VAT. The VAT the supplier pays on its own purchases is input VAT.
+          - For each period, the supplier pays the tax authority the difference between output VAT and recoverable input VAT, and files a VAT return. If input VAT is higher, the excess is carried forward or refunded under the administration rules.
+          - The standard rate is in the figure panel, read from the rules engine for today's date.
+      - id: m1-l2
+        title: Standard, zero-rated and exempt supplies
+        provisions: [nta2025.vat.rate, nta2025.vat.zero_rated, nta2025.vat.exempt]
+        parameters: [vat.zero_rated_examples, vat.exempt_examples]
+        body:
+          - A standard-rated supply carries VAT at the standard rate. A zero-rated supply carries VAT at a zero rate, and the supplier can normally recover input VAT on costs linked to it. An exempt supply sits outside VAT, and input VAT on costs linked to it is generally not recoverable.
+          - The difference matters for cash flow. Two businesses selling at the same price can end up with very different VAT costs depending on whether their supplies are zero-rated or exempt.
+          - The examples in the figure panel come from the rules engine. Check the prescribed lists in the Act before treating any supply as zero-rated or exempt.
+    quiz:
+      id: m1-quiz
+      pass_mark_percent: 60
+      questions:
+        - id: q1
+          prompt: What is input VAT?
+          options:
+            - {id: a, text: VAT a business charges its customers}
+            - {id: b, text: VAT a business pays on its own purchases}
+            - {id: c, text: A penalty for late filing}
+          answer: b
+          explanation: Input VAT is paid on purchases. Output VAT is charged on sales.
+        - id: q2
+          prompt: Which kind of supply normally lets the supplier recover input VAT while charging VAT at a zero rate?
+          options:
+            - {id: a, text: Zero-rated}
+            - {id: b, text: Exempt}
+            - {id: c, text: Out of scope}
+          answer: a
+          explanation: Zero-rated supplies carry VAT at a zero rate and normally keep the right to recover input VAT. Exempt supplies do not.
+        - id: q3
+          prompt: Where should you check whether a supply is zero-rated?
+          options:
+            - {id: a, text: The customer's opinion}
+            - {id: b, text: The prescribed list in the Act, through the legal library}
+            - {id: c, text: Last year's invoices}
+          answer: b
+          explanation: Zero-rated and exempt supplies are prescribed by law. The legal library links each list to its provision.
+
+  - id: m2
+    title: Invoices that hold up
+    lessons:
+      - id: m2-l1
+        title: What a valid tax invoice contains
+        provisions: [nta2025.vat.rate]
+        parameters: []
+        body:
+          - A tax invoice should identify the supplier and the buyer, including their tax identification numbers, give a unique invoice number and date, describe what was supplied, and show the net amount, the VAT charged and the total.
+          - The buyer relies on a valid invoice to recover input VAT. A missing tax identification number or an unclear description can cost the buyer that recovery and damage the relationship.
+          - Corrections are made with a credit note or a debit note that refers to the original invoice. An issued invoice is never edited or deleted.
+      - id: m2-l2
+        title: E-invoicing and fiscalisation
+        provisions: [nrs2025.establishment]
+        parameters: []
+        body:
+          - Under e-invoicing, an invoice is sent in a structured format to the tax authority's platform for validation before or as it reaches the buyer. A validated invoice receives a unique reference and a QR code that anyone can use to check it.
+          - Businesses connect through their own system or through an accredited service provider. The national rollout is phased by taxpayer size, starting with large taxpayers.
+          - E-invoicing gives the tax authority near real-time sight of sales and purchases. Errors that once surfaced in an audit years later now surface within days, so clean master data, such as customer tax identification numbers, matters more than before.
+          - The rollout dates and thresholds are being confirmed for this course. Until then, check the tax.ng e-invoicing workspace and official announcements.
+    quiz:
+      id: m2-quiz
+      pass_mark_percent: 60
+      questions:
+        - id: q1
+          prompt: An invoice was issued with the wrong quantity. How should it be corrected?
+          options:
+            - {id: a, text: Edit the original invoice}
+            - {id: b, text: Delete it and issue a new one with the same number}
+            - {id: c, text: Issue a credit or debit note that refers to the original}
+          answer: c
+          explanation: Issued invoices are never edited or deleted. A credit or debit note corrects them and keeps the audit trail.
+        - id: q2
+          prompt: What does a validated e-invoice receive from the tax authority's platform?
+          options:
+            - {id: a, text: A unique reference and a QR code}
+            - {id: b, text: An automatic refund}
+            - {id: c, text: An exemption from VAT}
+          answer: a
+          explanation: Validation returns a unique reference and a QR code that can be used to check the invoice.
+        - id: q3
+          prompt: Why does customer master data matter more under e-invoicing?
+          options:
+            - {id: a, text: It does not matter}
+            - {id: b, text: Errors surface within days instead of at a later audit}
+            - {id: c, text: Customers pay the VAT directly to the authority}
+          answer: b
+          explanation: Near real-time validation means bad data, such as a wrong tax identification number, is caught quickly and must be fixed.
+
+  - id: m3
+    title: Records and returns
+    lessons:
+      - id: m3-l1
+        title: Keeping VAT records
+        provisions: [nta2025.vat.rate]
+        parameters: []
+        body:
+          - Keep every sales invoice, purchase invoice, credit note and import document, along with the VAT account that links them to each return. The administration rules set how long records must be kept.
+          - Reconcile the VAT account to the return before filing. Under e-invoicing, also reconcile your records to the validated invoices the tax authority holds, because that is what it will compare against.
+          - File and pay by the due date shown in the tax.ng obligations calendar. Late filing and late payment attract penalties and interest.
+    quiz:
+      id: m3-quiz
+      pass_mark_percent: 60
+      questions:
+        - id: q1
+          prompt: Before filing a VAT return under e-invoicing, what extra reconciliation is sensible?
+          options:
+            - {id: a, text: Records against the validated invoices the tax authority holds}
+            - {id: b, text: Bank balance against payroll}
+            - {id: c, text: None is needed}
+          answer: a
+          explanation: The tax authority holds validated invoice data and will compare returns against it.
+        - id: q2
+          prompt: What attracts penalties and interest?
+          options:
+            - {id: a, text: Filing early}
+            - {id: b, text: Late filing and late payment}
+            - {id: c, text: Using a credit note}
+          answer: b
+          explanation: Penalties and interest apply when a return or payment is late.
+
+assessment:
+  id: final
+  pass_mark_percent: 70
+  questions:
+    - id: f1
+      prompt: A supplier's output VAT is lower than its recoverable input VAT for the period. What happens to the excess?
+      options:
+        - {id: a, text: It is lost}
+        - {id: b, text: It is carried forward or refunded under the administration rules}
+        - {id: c, text: It is paid to customers}
+      answer: b
+      explanation: Excess input VAT is carried forward or refunded under the administration rules.
+    - id: f2
+      prompt: Which supply generally does not allow recovery of related input VAT?
+      options:
+        - {id: a, text: Exempt}
+        - {id: b, text: Zero-rated}
+        - {id: c, text: Standard-rated}
+      answer: a
+      explanation: Exempt supplies sit outside VAT, so related input VAT is generally not recoverable.
+    - id: f3
+      prompt: What does a buyer need to recover input VAT on a purchase?
+      options:
+        - {id: a, text: A verbal confirmation from the supplier}
+        - {id: b, text: A valid tax invoice}
+        - {id: c, text: A bank statement only}
+      answer: b
+      explanation: A valid tax invoice is the buyer's evidence for recovering input VAT.
+    - id: f4
+      prompt: Which detail is essential on a tax invoice?
+      options:
+        - {id: a, text: The supplier's and buyer's tax identification numbers}
+        - {id: b, text: The supplier's bank balance}
+        - {id: c, text: The buyer's home address only}
+      answer: a
+      explanation: Tax identification numbers identify both parties to the tax authority.
+    - id: f5
+      prompt: Under e-invoicing, when does the tax authority's platform see an invoice?
+      options:
+        - {id: a, text: Only at audit}
+        - {id: b, text: At year end}
+        - {id: c, text: When it is validated, before or as it reaches the buyer}
+      answer: c
+      explanation: E-invoices are validated by the platform close to real time.
+    - id: f6
+      prompt: Where should a business read the current standard VAT rate?
+      options:
+        - {id: a, text: From the rules engine through the calculator or legal library}
+        - {id: b, text: From an old invoice}
+        - {id: c, text: From a supplier's price list}
+      answer: a
+      explanation: The rules engine holds the effective-dated rate and records the version used.
+
+case_study:
+  title: Musa's bakery gets ready for e-invoicing
+  calculator: vat
+  scenario:
+    - Musa runs a bakery that supplies supermarkets and sells some items to walk-in customers. He also sells a small range of packaged bread that may fall within basic food items.
+    - A supermarket buyer has told him that from next year it will accept only validated e-invoices, and that two recent invoices were missing its tax identification number.
+  tasks:
+    - Decide which of Musa's supplies may be zero-rated, and where he should confirm it.
+    - Explain how Musa should correct the two invoices with missing details.
+    - List the master data Musa needs to clean before connecting to e-invoicing.
+    - Use the VAT calculator to show the supermarket the VAT on a sample order. Do not quote a rate without the calculator result.
+  discussion:
+    - Packaged bread may fall within basic food items, which are zero-rated, but Musa should check the prescribed list through the legal library before changing his invoices.
+    - He should issue credit notes for the two invoices and reissue them with the buyer's tax identification number, never editing the originals.
+    - Customer names, tax identification numbers, product descriptions and VAT categories all need to be accurate, because the platform validates them.
+    - The VAT calculator applies the current rate from the rules engine and records the rules version.

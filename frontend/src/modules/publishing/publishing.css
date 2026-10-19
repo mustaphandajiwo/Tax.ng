@@ -1,0 +1,21 @@
+.pub-labels { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 6px; }
+.pub-labels .badge { margin-left: 0; }
+.pub-card h2 { margin: 4px 0 6px; font-size: 1.15rem; }
+.pub-card h2 a { color: inherit; }
+.pub-header-label { margin: 12px 0 4px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.pub-gap { margin-left: 6px; }
+.pub-toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin: 12px 0; }
+.pub-search { display: flex; gap: 8px; flex: 1 1 260px; }
+.pub-search input { flex: 1; min-width: 0; }
+.pub-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.pub-aside { display: flex; flex-direction: column; gap: 12px; }
+.pub-ad__image { max-width: 100%; height: auto; display: block; margin: 6px 0; border-radius: 4px; }
+.pub-dl dt { font-weight: 600; margin-top: 8px; }
+.pub-dl dd { margin: 2px 0 0; color: var(--muted); }
+.pub-sponsor { margin: 12px 0; }
+.pub-preview { white-space: pre-wrap; font-size: 0.85rem; background: var(--bg, #f7f7f5); padding: 12px; border-radius: 6px; overflow-x: auto; }
+.pub-creative { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pub-creative-form { display: grid; gap: 4px; margin-top: 6px; }
+@media (min-width: 900px) {
+  .pub-layout { grid-template-columns: minmax(0, 1fr) 280px; }
+}

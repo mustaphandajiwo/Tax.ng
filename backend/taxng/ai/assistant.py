@@ -130,6 +130,17 @@ class Tools:
     def __init__(self, tree: ParameterTree) -> None:
         self.tree = tree
         self.calls: list[ToolCall] = []
+        self.account: dict[str, Any] | None = None
+
+    def get_account_summary(self, summary: dict[str, Any]) -> dict[str, Any]:
+        """AI-04: the caller's own account data, fetched by the route after permission checks.
+
+        The assistant never queries the database itself; it only receives what
+        the route has already scoped to the signed-in user and active organisation.
+        """
+        self.calls.append(ToolCall("get_account_summary", {"scopes": sorted(summary)}, summary))
+        self.account = summary
+        return summary
 
     def get_parameter(self, name: str, on: dt.date) -> Any | None:
         try:
@@ -195,12 +206,41 @@ def describe_parameter(tree: ParameterTree, name: str, value: Any) -> str:
     return f"{label}: {number}."
 
 
+def describe_account(account: dict[str, Any]) -> list[str]:
+    """Plain-language lines about the caller's own account. States no figures."""
+    lines: list[str] = []
+    personal = account.get("personal")
+    if personal is not None:
+        check = personal.get("latest_check")
+        if not check:
+            lines.append("From your account: you have not completed a tax health check yet, so I can't comment on your own position.")
+        else:
+            flagged = [
+                f["title"]
+                for items in check["findings_by_dimension"].values()
+                for f in items
+                if f.get("review_recommended") or f.get("severity") == "high"
+            ]
+            text = f"From your account: your latest health check ({check['year']}) "
+            text += ("flags " + "; ".join(sorted(set(flagged))[:4]) + ".") if flagged else "has no findings that need review."
+            lines.append(text)
+    org = account.get("organisation")
+    if org is not None:
+        upcoming = org.get("upcoming_obligations") or []
+        if upcoming:
+            items = "; ".join(f"{o['title']} due {o['due_date']}" for o in upcoming[:3])
+            lines.append(f"For {org['org']['name']}: next obligations are {items}.")
+        else:
+            lines.append(f"For {org['org']['name']}: no upcoming obligations are on the calendar.")
+    return lines
+
+
 class TemplateProvider:
     """Deterministic composer used in the demo and in tests."""
 
     def compose(self, question: str, intent: Intent, passages: list[Provision],
                 tools: Tools, calculation: dict[str, Any] | None) -> Draft:
-        if not passages and not calculation:
+        if not passages and not calculation and not tools.account:
             return Draft(
                 "I could not find an approved source in the tax.ng library for that question. "
                 "A tax professional can help.",
@@ -216,6 +256,8 @@ class TemplateProvider:
                 f"{naira(Decimal(out['monthly_tax']))} a month. That is an effective rate of "
                 f"{out['effective_rate_percent']}%."
             )
+        if tools.account:
+            paragraphs.extend(describe_account(tools.account))
         if "cit" in intent.taxes and intent.amount is not None:
             paragraphs.append(
                 "Company tax depends on turnover, fixed assets and profits together. "
@@ -292,11 +334,14 @@ class Assistant:
                 break
         return passages
 
-    def answer(self, question: str) -> dict[str, Any]:
+    def answer(self, question: str, *, account: dict[str, Any] | None = None) -> dict[str, Any]:
+        """Answer a question. ``account`` is the caller's own, already-scoped account data (AI-04)."""
         question = question.strip()[:500]
         intent = classify(question, self.default_year)
         passages = self.retrieve(question, intent)
         tools = Tools(self.tree)
+        if account is not None:
+            tools.get_account_summary(account)
 
         calculation = None
         notices: list[str] = []
@@ -313,7 +358,7 @@ class Assistant:
             return self._blocked(intent, tools, report)
 
         cited = [self.library.provisions[c] for c in draft.cited]
-        confidence = "high" if cited and tools.calls else "medium" if cited else "low"
+        confidence = "high" if cited and tools.calls else "medium" if cited or tools.account else "low"
         return {
             "answer": draft.text,
             "blocked": False,
@@ -325,6 +370,7 @@ class Assistant:
             "calculation": calculation,
             "guard": {"citations_ok": True, "figures_ok": True, "problems": []},
             "notices": notices,
+            "account_used": tools.account is not None,
             "disclaimer": DISCLAIMER,
         }
 
@@ -340,6 +386,7 @@ class Assistant:
             "calculation": None,
             "guard": {"citations_ok": report.citations_ok, "figures_ok": report.figures_ok, "problems": report.problems},
             "notices": [],
+            "account_used": tools.account is not None,
             "disclaimer": DISCLAIMER,
         }
 

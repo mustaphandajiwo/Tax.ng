@@ -352,6 +352,8 @@ const CALCS = [
   { path: "/calculators/cit", title: "Company income tax", text: "Small company test, CIT and the development levy." },
   { path: "/calculators/vat", title: "VAT", text: "Add or extract VAT for standard, zero-rated and exempt supplies." },
   { path: "/calculators/wht", title: "Withholding tax", text: "Deduction at source by payment type and recipient." },
+  { path: "/calculators/cgt", title: "Capital gains", text: "Gains on selling assets, with the share and personal belongings exemptions." },
+  { path: "/calculators/stamp-duty", title: "Stamp duty", text: "The electronic transfer levy and duty on share capital." },
 ];
 
 export function CalculatorIndex() {

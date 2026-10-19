@@ -1,0 +1,385 @@
+# Tax health check question bank (HC-01, HC-02, HC-04).
+#
+# - `facts`: profile questions. Each sets one profile fact. `ask_if` uses the
+#   condition language of rules/obligations (_format.yaml); a question is shown
+#   only when its condition is true, so an employee without business income is
+#   never asked corporate questions. `allow_unknown` adds a "Not sure" answer.
+# - `evidence`: questions about one obligation, asked only when the obligation
+#   applies (and `ask_if`, if given, is true). Answers: yes | no | unknown, plus
+#   not_applicable where `allow_na` is true. `severity` is the severity of a "no".
+#   `dimension` is one of obligation_coverage, timeliness, documentation,
+#   reporting_accuracy. Exposure materiality and evidence confidence are derived.
+# - `contradictions`: checked over all saved facts, shown or hidden. An active
+#   contradiction must be resolved before a check can be completed.
+# - `materiality`: when exposure for an obligation's gaps is raised one level.
+# No figures here: thresholds reference rule parameters by name.
+
+business: &business
+  any:
+    - {fact: entity_type, in: [company, sole_proprietor, partnership, nonprofit]}
+    - {fact: has_business_income, eq: true}
+individual: &individual
+  fact: entity_type
+  in: [individual, sole_proprietor]
+
+facts:
+  - id: q.entity_type
+    fact: entity_type
+    text: Which best describes you for tax purposes?
+    type: choice
+    options:
+      - {value: individual, label: "An individual (employee, investor, landlord or freelancer)"}
+      - {value: sole_proprietor, label: "A sole proprietor running a registered business name"}
+      - {value: partnership, label: "A partnership"}
+      - {value: company, label: "A limited company"}
+      - {value: nonprofit, label: "A nonprofit, charity or association"}
+  - id: q.state
+    fact: state
+    text: Which state are you resident in (or is your business based in)?
+    type: state
+  - id: q.has_employment_income
+    fact: has_employment_income
+    text: Do you earn a salary or wages from an employer?
+    type: bool
+    ask_if: {fact: entity_type, eq: individual}
+  - id: q.has_business_income
+    fact: has_business_income
+    text: Do you earn income from a business, trade or freelance work of your own?
+    type: bool
+    allow_unknown: true
+    ask_if: {fact: entity_type, eq: individual}
+  - id: q.annual_turnover
+    fact: annual_turnover
+    text: Roughly what is your annual business turnover (gross sales)?
+    type: money
+    allow_unknown: true
+    ask_if: *business
+  - id: q.fixed_assets
+    fact: fixed_assets
+    text: What is the total value of the company's fixed assets?
+    type: money
+    allow_unknown: true
+    ask_if: {fact: entity_type, eq: company}
+  - id: q.is_professional_services
+    fact: is_professional_services
+    text: Does the company provide professional services (for example law, accounting, consulting or engineering)?
+    type: bool
+    allow_unknown: true
+    ask_if: {fact: entity_type, eq: company}
+  - id: q.non_resident
+    fact: non_resident
+    text: Is the company resident outside Nigeria (for example a foreign company with a Nigerian presence)?
+    type: bool
+    ask_if: {fact: entity_type, eq: company}
+  - id: q.sells_taxable_supplies
+    fact: sells_taxable_supplies
+    text: Do you sell goods or services that are subject to VAT?
+    type: bool
+    allow_unknown: true
+    ask_if: *business
+  - id: q.makes_wht_payments
+    fact: makes_wht_payments
+    text: Do you pay rent, professional fees, contract sums or other payments on which withholding tax is deducted?
+    type: bool
+    allow_unknown: true
+    ask_if: *business
+  - id: q.has_employees
+    fact: has_employees
+    text: Do you employ anyone (including domestic staff) and pay them a salary or wages?
+    type: bool
+  - id: q.employee_count
+    fact: employee_count
+    text: How many people do you employ?
+    type: count
+    allow_unknown: true
+    ask_if: {fact: has_employees, eq: true}
+  - id: q.has_rental_income
+    fact: has_rental_income
+    text: Do you receive rent from property you own?
+    type: bool
+    ask_if: *individual
+  - id: q.has_foreign_income
+    fact: has_foreign_income
+    text: Do you receive income from outside Nigeria (for example foreign employment, investments or rent)?
+    type: bool
+    allow_unknown: true
+    ask_if: *individual
+  - id: q.has_capital_gains
+    fact: has_capital_gains
+    text: In this year, did you sell or dispose of assets (property, shares, a business or valuables) for more than they cost?
+    type: bool
+    allow_unknown: true
+    ask_if: {fact: entity_type, in: [individual, sole_proprietor, company]}
+
+evidence:
+  # --- Annual self-assessment return ---------------------------------------------
+  - id: e.pit.filed
+    obligation: pit.self_assessment
+    dimension: obligation_coverage
+    text: Did you file a self-assessment return for the previous tax year?
+    severity: high
+    why: An unfiled return can lead to an estimated (best of judgement) assessment, with penalties and interest.
+    next_step: File the outstanding self-assessment return with your state tax authority.
+  - id: e.pit.on_time
+    obligation: pit.self_assessment
+    dimension: timeliness
+    text: Was that return filed by the due date?
+    severity: medium
+    allow_na: true
+    why: Late filing attracts penalties even when no further tax is due.
+    next_step: Diarise the annual filing date and prepare records ahead of it.
+  - id: e.pit.records
+    obligation: pit.self_assessment
+    dimension: documentation
+    text: Do you keep records of every income source (bank statements, invoices, contracts) for the year?
+    severity: medium
+    evidence: [Bank statements for the year, Invoices and contracts for business income]
+    why: Without records you cannot support the figures in your return if the tax authority asks.
+    next_step: Gather bank statements, invoices and contracts for every income source.
+  - id: e.pit.complete
+    obligation: pit.self_assessment
+    dimension: reporting_accuracy
+    text: Did your last return include all of your income sources?
+    severity: high
+    why: Leaving out income is the most common reason for an additional assessment.
+    next_step: Check that every income source appears in the return, and correct it if not.
+  - id: e.foreign.tax_paid
+    obligation: pit.self_assessment
+    dimension: documentation
+    ask_if: {fact: has_foreign_income, eq: true}
+    text: Do you have certificates or statements for any tax paid abroad on your foreign income?
+    severity: medium
+    allow_na: true
+    evidence: [Foreign tax certificates or statements]
+    why: Relief for foreign tax usually depends on evidence that the tax was paid.
+    next_step: Request tax certificates or annual statements from the foreign payer or tax authority.
+  - id: e.foreign.reported
+    obligation: pit.self_assessment
+    dimension: reporting_accuracy
+    ask_if: {fact: has_foreign_income, eq: true}
+    text: Was your foreign income included in your last Nigerian return?
+    severity: high
+    why: Residents are generally taxed on worldwide income, so foreign income belongs in the return.
+    next_step: Ask an adviser how your foreign income should be reported and whether relief applies.
+
+  # --- Rental income ---------------------------------------------------------------
+  - id: e.rent.agreements
+    obligation: pit.rental_income
+    dimension: documentation
+    text: Do you have tenancy agreements and rent receipts for each property you let?
+    severity: medium
+    evidence: [Tenancy agreements, Rent receipts or bank records of rent received]
+    why: These records support the rent you report and any expenses you claim.
+    next_step: Collect tenancy agreements and rent records for each property.
+  - id: e.rent.wht_notes
+    obligation: pit.rental_income
+    dimension: documentation
+    text: Where a company tenant deducted withholding tax, do you hold the credit notes?
+    severity: low
+    allow_na: true
+    evidence: [Withholding tax credit notes from tenants]
+    why: Credit notes let you set the tax already withheld against your liability.
+    next_step: Ask corporate tenants for withholding tax credit notes.
+  - id: e.rent.reported
+    obligation: pit.rental_income
+    dimension: reporting_accuracy
+    text: Is all rent you receive included in your annual return?
+    severity: high
+    why: Unreported rent is a common cause of additional assessments.
+    next_step: Make sure all rent received is included in your next return.
+
+  # --- Capital gains (individuals) ---------------------------------------------------
+  - id: e.cgti.records
+    obligation: cgt.individual_gains
+    dimension: documentation
+    text: Do you have purchase and sale documents for each asset you disposed of?
+    severity: medium
+    evidence: [Purchase documents, Sale agreements, Receipts for buying and selling costs]
+    why: The gain is worked out from cost and proceeds, so both need evidence.
+    next_step: Gather purchase and sale documents, then work out the gain with the capital gains calculator.
+  - id: e.cgti.reported
+    obligation: cgt.individual_gains
+    dimension: reporting_accuracy
+    text: Have the gains been included in your annual return?
+    severity: high
+    why: Gains are reportable even where an exemption may apply.
+    next_step: Include the gains, and any exemption claimed, in your annual return.
+
+  # --- PAYE ------------------------------------------------------------------------
+  - id: e.paye.registered
+    obligation: paye.monthly_remittance
+    dimension: obligation_coverage
+    text: Are you deducting PAYE from salaries and remitting it to the state tax authority?
+    severity: high
+    why: An employer who does not deduct PAYE can be liable for the tax that should have been deducted, with penalties.
+    next_step: Register as an employer with the state tax authority and start deducting PAYE.
+  - id: e.paye.on_time
+    obligation: paye.monthly_remittance
+    dimension: timeliness
+    text: In the last twelve months, was PAYE remitted by the due date every month?
+    severity: high
+    why: Late remittance attracts penalties and interest for each month late.
+    next_step: Set a monthly payroll calendar so PAYE is remitted before the due date.
+  - id: e.paye.records
+    obligation: paye.monthly_remittance
+    dimension: documentation
+    text: Do you keep monthly payroll records and remittance receipts?
+    severity: medium
+    evidence: [Monthly payroll records, PAYE remittance receipts]
+    why: Receipts are your proof of payment in a PAYE audit.
+    next_step: Keep payroll records and remittance receipts for each month.
+  - id: e.paye.annual_return
+    obligation: paye.monthly_remittance
+    dimension: reporting_accuracy
+    text: Did you file the annual return of staff emoluments, and does it agree with the monthly remittances?
+    severity: medium
+    why: Differences between the annual return and remittances are a common trigger for PAYE audits.
+    next_step: Reconcile the annual employer return to the monthly remittances.
+
+  # --- WHT -------------------------------------------------------------------------
+  - id: e.wht.deducting
+    obligation: wht.monthly_remittance
+    dimension: obligation_coverage
+    text: Do you deduct withholding tax from qualifying payments?
+    severity: high
+    why: A payer who fails to deduct can be liable for the tax that should have been withheld.
+    next_step: Identify payments that need withholding tax and use the WHT calculator for each.
+  - id: e.wht.on_time
+    obligation: wht.monthly_remittance
+    dimension: timeliness
+    text: Is withholding tax remitted by the due date in the month after deduction?
+    severity: medium
+    why: Late remittance attracts penalties and interest.
+    next_step: Remit withholding tax before the monthly due date.
+  - id: e.wht.credit_notes
+    obligation: wht.monthly_remittance
+    dimension: documentation
+    text: Do you keep remittance receipts and copies of credit notes given to recipients?
+    severity: low
+    evidence: [WHT remittance receipts, Copies of credit notes issued]
+    why: Recipients rely on credit notes, and you rely on receipts as proof of remittance.
+    next_step: Keep a monthly file of WHT receipts and credit notes.
+  - id: e.wht.rates
+    obligation: wht.monthly_remittance
+    dimension: reporting_accuracy
+    text: Do you apply the rate for each payment type and recipient (including the higher rate where a recipient has no TIN)?
+    severity: medium
+    why: Using the wrong rate leaves a shortfall that the payer may have to make good.
+    next_step: Check rates by payment type with the WHT calculator.
+
+  # --- VAT -------------------------------------------------------------------------
+  - id: e.vat.registered
+    obligation: vat.monthly_return
+    dimension: obligation_coverage
+    text: Are you registered for VAT and filing monthly returns?
+    severity: high
+    why: Unregistered taxable persons can be assessed for VAT they should have charged, with penalties.
+    next_step: Confirm whether you must register for VAT, then register and start filing.
+  - id: e.vat.on_time
+    obligation: vat.monthly_return
+    dimension: timeliness
+    text: Were your VAT returns for the last twelve months filed by the due date?
+    severity: medium
+    why: Each late return attracts a penalty.
+    next_step: Set a monthly VAT calendar.
+  - id: e.vat.invoices
+    obligation: vat.monthly_return
+    dimension: documentation
+    text: Do you issue VAT invoices and keep purchase invoices for the input VAT you claim?
+    severity: medium
+    evidence: [VAT invoices issued, Purchase invoices supporting input VAT]
+    why: Input VAT without a supporting invoice may be disallowed.
+    next_step: Keep sales and purchase invoices for every VAT period.
+  - id: e.vat.reconciled
+    obligation: vat.monthly_return
+    dimension: reporting_accuracy
+    text: Do your VAT returns reconcile to your sales records?
+    severity: medium
+    why: Differences between returns and sales records are a common audit finding.
+    next_step: Reconcile VAT returns to the sales ledger each month.
+
+  # --- CIT and development levy --------------------------------------------------------
+  - id: e.cit.filed
+    obligation: cit.annual_return
+    dimension: obligation_coverage
+    text: Did the company file its CIT return for the last accounting period, even if no tax was payable?
+    severity: high
+    why: Small companies that pay tax at a zero rate must still file, and non-filing attracts penalties.
+    next_step: File the outstanding CIT return with the Nigeria Revenue Service.
+  - id: e.cit.on_time
+    obligation: cit.annual_return
+    dimension: timeliness
+    text: Was that return filed by the due date?
+    severity: medium
+    allow_na: true
+    why: Late filing attracts penalties.
+    next_step: Plan the year-end accounts timetable around the filing date.
+  - id: e.cit.accounts
+    obligation: cit.annual_return
+    dimension: documentation
+    text: Does the company prepare annual financial statements and a tax computation?
+    severity: medium
+    evidence: [Annual financial statements, Tax computation and capital allowance schedules]
+    why: The return must be supported by accounts and a computation.
+    next_step: Engage an accountant to prepare the financial statements and computation.
+  - id: e.cit.reconciled
+    obligation: cit.annual_return
+    dimension: reporting_accuracy
+    text: Does the tax computation reconcile to the financial statements?
+    severity: medium
+    why: Unreconciled figures are a common reason for queries and additional assessments.
+    next_step: Reconcile the computation to the accounts before filing.
+  - id: e.levy.paid
+    obligation: cit.development_levy
+    dimension: obligation_coverage
+    text: Is the development levy computed and paid with the CIT return?
+    severity: high
+    why: The levy replaced several earlier levies; missing it leaves an underpayment.
+    next_step: Compute the development levy with the CIT calculator and include it in the return.
+
+  # --- Capital gains (companies) ------------------------------------------------------
+  - id: e.cgtc.records
+    obligation: cgt.company_gains
+    dimension: documentation
+    text: Do you hold acquisition cost and disposal records for each asset disposed of?
+    severity: medium
+    evidence: [Acquisition cost records, Sale agreements, Schedule of share disposals]
+    why: The chargeable gain and any share exemption depend on these records.
+    next_step: Prepare a disposal schedule with cost and proceeds for each asset.
+  - id: e.cgtc.reported
+    obligation: cgt.company_gains
+    dimension: reporting_accuracy
+    text: Were the gains included in the CIT return?
+    severity: high
+    why: Companies' gains are taxed with their profits, so they belong in the return.
+    next_step: Include chargeable gains in the CIT computation.
+
+contradictions:
+  - id: c.no_employees_but_count
+    when:
+      all:
+        - {fact: has_employees, eq: false}
+        - {fact: employee_count, gt: 0}
+    message: You said you employ no one, but you also gave a number of employees above zero. Which is right?
+    questions: [q.has_employees, q.employee_count]
+  - id: c.employees_but_zero_count
+    when:
+      all:
+        - {fact: has_employees, eq: true}
+        - {fact: employee_count, eq: 0}
+    message: You said you employ staff, but you gave the number of employees as zero. Please check both answers.
+    questions: [q.has_employees, q.employee_count]
+  - id: c.taxable_supplies_no_turnover
+    when:
+      all:
+        - {fact: sells_taxable_supplies, eq: true}
+        - {fact: annual_turnover, lte: 0}
+    message: You said you sell goods or services subject to VAT, but gave your turnover as zero. Please check both answers.
+    questions: [q.sells_taxable_supplies, q.annual_turnover]
+
+materiality:
+  elevate_when:
+    any:
+      - {fact: annual_turnover, gt: {param: cit.small_company.turnover_ceiling}}
+      - {fact: fixed_assets, gt: {param: cit.small_company.fixed_assets_ceiling}}
+  reason: Your business is above a small company ceiling, so the amounts involved are likely to be larger.

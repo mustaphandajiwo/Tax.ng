@@ -47,6 +47,14 @@ def logout(services: Services, request: Request, params: dict[str, str]) -> Repl
     return Reply(200, {"status": "signed_out"}, cookies=[Cookie(SESSION_COOKIE, "", max_age=0)])
 
 
+@route("GET", "/api/session")
+def session(services: Services, request: Request, params: dict[str, str]) -> tuple[int, Any]:
+    """Signed-in check that never errors, so the app can decide what to show."""
+    if request.principal is None or request.principal.via != "session":
+        return 200, {"signed_in": False}
+    return 200, {"signed_in": True, "me": _me(services, request)}
+
+
 @route("GET", "/api/me")
 def me(services: Services, request: Request, params: dict[str, str]) -> tuple[int, Any]:
     return 200, _me(services, request)

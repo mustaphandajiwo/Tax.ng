@@ -1,0 +1,210 @@
+# Provisions added by the compliance module (CALC-06, HC-01 to HC-07).
+# Same rules as content/provisions.yaml: plain-language summaries with no money
+# amounts or percentages (figures come from the rules engine through
+# `parameters`), and `section` stays "[to be confirmed]" until a legal reviewer
+# checks the gazetted text.
+
+# --- Capital gains ------------------------------------------------------------
+- id: nta2025.cgt.companies
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Chargeable gains of companies
+  tax: cgt
+  effective_from: 2026-01-01
+  summary: >-
+    A company's chargeable gains on the disposal of assets are taxed at the
+    prevailing companies income tax rate. The gain is the disposal proceeds less
+    the cost of acquisition and allowable expenses of acquisition and disposal.
+  keywords: [capital gains, cgt, disposal, asset, company, gain, sale]
+  parameters: [cgt.company.rate_parameter, cit.rate.other]
+  review_status: secondary_source
+
+- id: nta2025.cgt.small_company
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Small companies and chargeable gains
+  tax: cgt
+  effective_from: 2026-01-01
+  summary: >-
+    Small companies pay companies income tax at a zero rate. Whether that
+    treatment extends to their chargeable gains is not yet confirmed, so results
+    that rely on it are flagged for review.
+  keywords: [small company, capital gains, exemption, cgt]
+  parameters: [cgt.company.small_company_rate_applies, cit.rate.small]
+  review_status: unverified
+
+- id: nta2025.cgt.share_exemption
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Exemption for small disposals of shares
+  tax: cgt
+  effective_from: 2026-01-01
+  summary: >-
+    Gains on a direct disposal of shares are exempt where, over any twelve-month
+    period, total disposal proceeds and total chargeable gains on shares both
+    stay within prescribed ceilings.
+  keywords: [shares, stock, equity, exemption, disposal, capital gains]
+  parameters: [cgt.share_exemption.proceeds_ceiling, cgt.share_exemption.gain_ceiling]
+  review_status: secondary_source
+
+- id: nta2025.cgt.individuals
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Chargeable gains of individuals
+  tax: cgt
+  effective_from: 2026-01-01
+  summary: >-
+    An individual's chargeable gains are understood to be added to chargeable
+    income and taxed at personal income tax rates. This treatment is pending
+    legal confirmation.
+  keywords: [capital gains, individual, personal, disposal, property, land]
+  parameters: [cgt.individual.scale_parameter]
+  review_status: unverified
+
+- id: nta2025.cgt.chattels
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Personal chattels
+  tax: cgt
+  effective_from: 2026-01-01
+  summary: >-
+    A disposal of personal chattels by an individual is exempt where the
+    disposal value does not exceed the higher of a fixed amount and a multiple of
+    the annual national minimum wage.
+  keywords: [chattels, personal belongings, car, jewellery, furniture, exemption]
+  parameters:
+    - cgt.individual.chattel_exemption.fixed_ceiling
+    - cgt.individual.chattel_exemption.minimum_wage_multiple
+    - cgt.individual.chattel_exemption.national_minimum_wage_monthly
+  review_status: unverified
+
+# --- Stamp duties ----------------------------------------------------------------
+- id: nta2025.stamp_duty.electronic_transfer
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Electronic money transfer levy
+  tax: stamp_duty
+  effective_from: 2026-01-01
+  summary: >-
+    A flat levy applies to each electronic receipt or transfer at or above a
+    prescribed amount. Transfers between accounts of the same owner in the same
+    bank are exempt.
+  keywords: [stamp duty, emtl, electronic transfer, bank, levy, receipt]
+  parameters:
+    - stamp_duty.electronic_transfer.levy
+    - stamp_duty.electronic_transfer.threshold
+  review_status: secondary_source
+
+- id: nta2025.stamp_duty.share_capital
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Duty on share capital
+  tax: stamp_duty
+  effective_from: 2026-01-01
+  summary: >-
+    Duty is charged on a company's authorised share capital at incorporation
+    and on any increase when new shares are created.
+  keywords: [stamp duty, share capital, incorporation, new shares, cac]
+  parameters: [stamp_duty.share_capital.rate]
+  review_status: secondary_source
+
+- id: nta2025.stamp_duty.stamping_deadline
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Time limit for stamping
+  tax: stamp_duty
+  effective_from: 2026-01-01
+  summary: >-
+    Dutiable instruments should be presented for stamping within a set number of
+    days after execution. Late stamping can attract penalties. The time limit is
+    pending legal review.
+  keywords: [stamping, deadline, late, penalty, instrument]
+  parameters: [stamp_duty.stamping_deadline_days]
+  review_status: unverified
+
+# --- Filing and remittance obligations (rules/obligations) ---------------------------
+- id: ntaa2025.pit.self_assessment
+  instrument: Nigeria Tax Administration Act 2025
+  section: "[to be confirmed]"
+  title: Annual self-assessment return for individuals
+  tax: pit
+  effective_from: 2026-01-01
+  summary: >-
+    An individual with income other than employment income taxed in full under
+    PAYE, such as business, rental or foreign income or chargeable gains, files
+    an annual self-assessment return with the state tax authority. The due date
+    is pending legal review.
+  keywords: [self-assessment, annual return, individual, filing, deadline, business income]
+  parameters: []
+  review_status: unverified
+
+- id: nta2025.pit.rental_income
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Rental income of individuals
+  tax: pit
+  effective_from: 2026-01-01
+  summary: >-
+    Rent received by an individual is part of chargeable income and is reported
+    in the annual return. Tax withheld by a corporate tenant is a credit against
+    the tax due, supported by the credit note.
+  keywords: [rental income, landlord, rent received, property, letting]
+  parameters: []
+  review_status: unverified
+
+- id: ntaa2025.paye.remittance
+  instrument: Nigeria Tax Administration Act 2025
+  section: "[to be confirmed]"
+  title: PAYE deduction and monthly remittance
+  tax: pit
+  effective_from: 2026-01-01
+  summary: >-
+    An employer deducts tax from employees' pay under PAYE and remits it monthly
+    to the relevant state tax authority, with an annual return of staff
+    emoluments. The monthly due date is pending legal review.
+  keywords: [paye, employer, payroll, remittance, monthly, staff]
+  parameters: []
+  review_status: unverified
+
+- id: ntaa2025.vat.returns
+  instrument: Nigeria Tax Administration Act 2025
+  section: "[to be confirmed]"
+  title: VAT registration and monthly returns
+  tax: vat
+  effective_from: 2026-01-01
+  summary: >-
+    A taxable person making taxable supplies registers for VAT, charges it on
+    taxable supplies and files a monthly return. Whether small businesses must
+    register and file is not yet confirmed, and the due date is pending review.
+  keywords: [vat, registration, monthly return, filing, output tax, input tax]
+  parameters: [cit.small_company.turnover_ceiling]
+  review_status: unverified
+
+- id: wht.regulations.remittance
+  instrument: Withholding tax regulations (title to be confirmed)
+  section: "[to be confirmed]"
+  title: Remitting tax withheld
+  tax: wht
+  effective_from: 2025-01-01
+  summary: >-
+    A payer who deducts withholding tax remits it to the relevant tax authority
+    by the prescribed day of the month after the deduction, and gives the
+    recipient a credit note.
+  keywords: [withholding, remittance, credit note, monthly, deadline]
+  parameters: []
+  review_status: secondary_source
+
+- id: ntaa2025.cit.returns
+  instrument: Nigeria Tax Administration Act 2025
+  section: "[to be confirmed]"
+  title: Companies income tax returns
+  tax: cit
+  effective_from: 2026-01-01
+  summary: >-
+    Every company files an annual companies income tax return with its accounts
+    and tax computation, including small companies that pay tax at a zero rate.
+    The development levy is computed and paid with the return. The due date is
+    pending legal review.
+  keywords: [cit return, annual return, accounts, filing, company, small company]
+  parameters: [cit.small_company.turnover_ceiling, cit.small_company.fixed_assets_ceiling]
+  review_status: unverified

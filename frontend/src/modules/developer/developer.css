@@ -1,0 +1,4 @@
+.dev-code { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 0.82rem; overflow-x: auto; white-space: pre; max-width: 100%; }
+.dev-code--inline { display: block; margin-top: 6px; white-space: normal; word-break: break-all; }
+.dev-recon { margin-bottom: 16px; }
+.dev-recon h3 { margin-top: 16px; }

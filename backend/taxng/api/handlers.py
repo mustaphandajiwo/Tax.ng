@@ -17,7 +17,7 @@ from ..calculators.pit import DEDUCTIONS
 from ..calculators.vat import CATEGORIES
 from ..features import nav_for
 from ..legal import Guide, Provision
-from ..rules import ENGINE_VERSION
+from ..rules import ENGINE_VERSION, ParameterError
 from ..services import Services
 from .router import NotFound, Request, dispatch, route  # noqa: F401  (re-exported for callers and tests)
 

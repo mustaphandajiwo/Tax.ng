@@ -1,0 +1,43 @@
+# Stamp duties under the Nigeria Tax Act 2025 (CALC-06).
+# Figures transcribed from PwC Worldwide Tax Summaries (secondary source).
+# Earlier regimes (Stamp Duties Act, Finance Acts) are not modelled in this demo.
+description: Stamp duties, Nigeria Tax Act 2025
+metadata:
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/corporate/other-taxes
+
+electronic_transfer:
+  metadata:
+    provision: nta2025.stamp_duty.electronic_transfer
+  levy:
+    description: Flat electronic money transfer levy per qualifying receipt or transfer
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 50}
+  threshold:
+    description: Smallest electronic receipt or transfer that attracts the levy
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 10000}
+  own_account_exempt:
+    description: Transfers between accounts of the same owner in the same bank are exempt
+    values:
+      2026-01-01: {value: true}
+
+share_capital:
+  metadata:
+    provision: nta2025.stamp_duty.share_capital
+  rate:
+    description: Duty on authorised share capital at incorporation or on an increase
+    metadata: {unit: /1}
+    values:
+      2026-01-01: {value: 0.0075}
+
+stamping_deadline_days:
+  description: Days after execution within which a dutiable instrument should be stamped
+  metadata:
+    provision: nta2025.stamp_duty.stamping_deadline
+    review_status: unverified
+    unit: days
+  values:
+    2026-01-01: {value: 30}

@@ -1,0 +1,38 @@
+/* Compliance module: health-check questionnaire, report and print view. */
+.hc-steps { list-style: none; padding: 0; margin: 0 0 16px; display: flex; gap: 6px; flex-wrap: wrap; counter-reset: hcstep; }
+.hc-steps li { counter-increment: hcstep; }
+.hc-steps button { font: inherit; font-size: 0.85rem; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer; color: var(--muted); }
+.hc-steps button::before { content: counter(hcstep) ". "; }
+.hc-steps button[aria-current="step"] { border-color: var(--brand); color: var(--brand); font-weight: 600; }
+.hc-step h2 { margin-top: 0; }
+.hc-question { border-top: 1px solid var(--line); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.hc-question--flagged { border-left: 3px solid var(--warn-ink); padding-left: 10px; }
+.hc-radios { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.hc-radios legend { font-weight: 600; margin-bottom: 6px; padding: 0; width: 100%; }
+.hc-radio { display: inline-flex; align-items: center; gap: 6px; font-weight: 400; min-height: 32px; }
+.hc-clarify { display: block; margin-top: 6px; }
+.hc-nav { margin-top: 16px; }
+.hc-dims { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.hc-dim h3 { margin: 0 0 6px; font-size: 1rem; }
+.hc-counts { list-style: none; padding: 0; margin: 6px 0 0; color: var(--muted); }
+.hc-matrix td { white-space: nowrap; }
+.hc-findings li { gap: 4px; }
+.hc-finding--high { border-left: 3px solid var(--error-ink); padding-left: 10px !important; }
+.hc-finding--medium { border-left: 3px solid var(--warn-ink); padding-left: 10px !important; }
+.hc-finding__head { display: flex; gap: 6px; flex-wrap: wrap; }
+.hc-links { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.88rem; }
+.hc-dl div { border-top: 1px solid var(--line); padding: 8px 0; }
+.hc-dl dt { font-weight: 600; }
+.hc-dl dd { margin: 2px 0 0; color: var(--muted); }
+
+@media print {
+  body:has(.hc-print) .app__top,
+  body:has(.hc-print) .app__nav,
+  body:has(.hc-print) .demo-chip,
+  body:has(.hc-print) .skip,
+  .hc-noprint { display: none !important; }
+  body:has(.hc-print) .app__main { padding: 0; }
+  .hc-report .pill { border: 1px solid #999; }
+  .hc-report a { color: inherit; text-decoration: none; }
+  .hc-findings li { break-inside: avoid; }
+}

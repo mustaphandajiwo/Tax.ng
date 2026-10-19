@@ -1,0 +1,14 @@
+# Yoruba. DRAFT strings only, written by engineering for reviewer triage. None
+# is served until a staff reviewer approves a submission.
+lang: yo
+name: Yoruba
+native_name: Yorùbá
+note: Draft strings proposed by engineering. Not reviewed by a native speaker.
+strings:
+  nav.news: {text: Ìròyìn Owó-orí, status: draft}
+  nav.ask: {text: Béèrè lọ́wọ́ Tax AI, status: draft}
+  nav.about: {text: Nípa Wa, status: draft}
+  nav.languages: {text: Àwọn Èdè, status: draft}
+  button.sign_in: {text: Wọlé, status: draft}
+  button.send: {text: Fi ránṣẹ́, status: draft}
+  label.language: {text: Èdè, status: draft}

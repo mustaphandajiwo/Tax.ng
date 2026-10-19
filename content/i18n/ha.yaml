@@ -1,0 +1,17 @@
+# Hausa. DRAFT strings only, written by engineering for reviewer triage. None
+# is served until a staff reviewer approves a submission. A fluent reviewer
+# must check meaning, tone and tax terminology before approval.
+lang: ha
+name: Hausa
+native_name: Hausa
+note: Draft strings proposed by engineering. Not reviewed by a native speaker.
+strings:
+  nav.news: {text: Labaran Haraji, status: draft}
+  nav.calculators: {text: Na'urorin Lissafi, status: draft}
+  nav.ask: {text: Tambayi Tax AI, status: draft}
+  nav.about: {text: Game da Mu, status: draft}
+  nav.languages: {text: Harsuna, status: draft}
+  button.sign_in: {text: Shiga, status: draft}
+  button.sign_out: {text: Fita, status: draft}
+  button.send: {text: Aika, status: draft}
+  label.language: {text: Harshe, status: draft}

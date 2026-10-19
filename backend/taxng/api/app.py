@@ -53,6 +53,7 @@ def create_app(services: Services | None = None) -> Starlette:
 
     async def api(request: HttpRequest) -> Response:
         body: dict = {}
+        raw = b""
         if request.method in ("POST", "PUT", "PATCH", "DELETE"):
             limit = config.MAX_UPLOAD_BODY_BYTES if request.url.path.endswith(config.UPLOAD_PATH_SUFFIX) else config.MAX_BODY_BYTES
             raw = await request.body()
@@ -75,6 +76,7 @@ def create_app(services: Services | None = None) -> Starlette:
                 body=body,
                 headers={k.lower(): v for k, v in request.headers.items()},
                 cookies=dict(request.cookies),
+                raw_body=raw or None,
             ),
         )
         headers = {"Cache-Control": "no-store", **reply.headers}

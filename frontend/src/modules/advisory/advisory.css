@@ -1,0 +1,10 @@
+/* Advisory module: directory cards, sponsored slot, badges and the adviser portal. */
+.adv-filters { margin-bottom: 8px; }
+.adv-card h3 { margin: 0 0 4px; }
+.adv-specs { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+.adv-badge { display: inline-flex; flex-direction: column; gap: 2px; }
+.adv-sponsored { margin: 12px 0 20px; display: flex; flex-direction: column; gap: 8px; }
+.adv-sponsored .adv-card { margin: 0; }
+.adv-notice { font-size: 0.88rem; margin-top: 16px; }
+.adv-engagement { border-left: 3px solid var(--line); padding-left: 10px; margin-top: 8px; }
+.adv-portal { display: grid; gap: 16px; }

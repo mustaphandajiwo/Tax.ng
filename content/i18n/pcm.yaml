@@ -1,0 +1,13 @@
+# Nigerian Pidgin. DRAFT strings only, written by engineering for reviewer
+# triage. None is served until a staff reviewer approves a submission.
+lang: pcm
+name: Nigerian Pidgin
+native_name: Naijá
+note: Draft strings proposed by engineering. Not reviewed by a native speaker.
+strings:
+  nav.calculators: {text: Calculator dem, status: draft}
+  nav.ask: {text: Ask Tax AI, status: draft}
+  nav.about: {text: About us, status: draft}
+  button.sign_in: {text: Enter, status: draft}
+  button.ask: {text: Ask question, status: draft}
+  disclaimer.not_authority: {text: tax.ng no be tax office and e no dey work for any tax office. Wetin dey here na general information, e no be tax advice., status: draft}

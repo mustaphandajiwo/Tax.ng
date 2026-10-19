@@ -1,0 +1,45 @@
+# Reform guides added by the compliance module (LAW-04, CALC-06, HC-01).
+# No figures: numbers are rendered from the rules engine via `parameters`.
+
+- id: capital-gains-2026
+  title: Capital gains under the new Act
+  summary: How gains on selling assets are taxed for companies and individuals, and the main exemptions.
+  applies_from: 2026-01-01
+  audience: [individual, sme, corporate]
+  calculator: cgt
+  provisions: [nta2025.cgt.companies, nta2025.cgt.share_exemption, nta2025.cgt.individuals, nta2025.cgt.chattels, nta2025.cgt.small_company]
+  parameters: [cit.rate.other, cgt.share_exemption.proceeds_ceiling, cgt.share_exemption.gain_ceiling]
+  body:
+    - From 2026, a company's chargeable gains are taxed at the same rate as its profits. The gain is what you received for the asset, less what it cost and the allowable expenses of buying and selling it.
+    - Small disposals of shares are exempt where both the proceeds and the gains over any twelve months stay within the ceilings. Add up every share disposal in the window before relying on the exemption.
+    - Individuals' gains are understood to be taxed at personal income tax rates by adding the gain to chargeable income. Personal belongings sold for modest amounts are exempt. Both points are pending legal review.
+    - Whether small companies' gains benefit from the zero rate is not confirmed. The calculator flags this whenever it applies.
+  translations: {}
+
+- id: stamp-duties-2026
+  title: Stamp duties you are likely to meet
+  summary: The levy on electronic transfers and the duty on share capital.
+  applies_from: 2026-01-01
+  audience: [individual, sme, corporate]
+  calculator: stamp-duty
+  provisions: [nta2025.stamp_duty.electronic_transfer, nta2025.stamp_duty.share_capital, nta2025.stamp_duty.stamping_deadline]
+  parameters: [stamp_duty.electronic_transfer.levy, stamp_duty.electronic_transfer.threshold, stamp_duty.share_capital.rate]
+  body:
+    - Banks collect a flat levy on electronic receipts and transfers at or above a set amount. Moving money between your own accounts in the same bank is exempt.
+    - Companies pay duty on authorised share capital when they are incorporated and again when they create new shares.
+    - Dutiable documents should be stamped soon after they are signed. The exact time limit is pending legal review.
+  translations: {}
+
+- id: tax-health-check
+  title: Which taxes apply to me?
+  summary: How the tax health check works out your obligations and what evidence to keep.
+  applies_from: 2026-01-01
+  audience: [individual, sme]
+  calculator: null
+  provisions: [ntaa2025.pit.self_assessment, ntaa2025.paye.remittance, ntaa2025.vat.returns, wht.regulations.remittance, ntaa2025.cit.returns]
+  parameters: []
+  body:
+    - A tax obligation depends on what you do, not on what kind of taxpayer you are. Employing staff brings PAYE. Making taxable supplies can bring VAT. Paying certain suppliers brings withholding tax. Rental, business and foreign income bring an annual return.
+    - The health check asks only the questions that matter for your answers. If you are not sure, say so. An unknown answer is reported as insufficient evidence, never as a failure.
+    - The result is self-reported and indicative. It is not an official assessment and it does not say that you owe tax. Where it recommends a review, a qualified adviser can confirm the position.
+  translations: {}

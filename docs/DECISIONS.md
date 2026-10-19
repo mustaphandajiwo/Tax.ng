@@ -74,8 +74,9 @@ keeps migration local.
 
 ## Known gaps (intentionally out of scope for the demo)
 
-- WhatsApp channel (CH-02), translations (CH-04: the data model exists, no
-  approved translations yet), and the CGT and stamp duty calculators (CALC-06).
+- Translations (CH-04): workflow built, but no translation is approved yet, so only English is served.
+- API rate limiting is per process in memory; move it to the gateway or Redis.
+- No background scheduler: scheduled publishing, webhook retries and status sync run on demand.
 - The unsubscribe email is not sent; production sends the signed link by email.
 - `/api/analytics/summary` is unauthenticated. Put it behind staff
   authentication before deployment.

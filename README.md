@@ -1,7 +1,22 @@
-# tax.ng — Phase 1 demo
+# tax.ng — platform demo (Phases 1 to 4)
 
-Working demo of the Phase 1 scope in *TAX.NG Product Requirements and Technical
-Architecture* ("the PRD"): the 2025 tax reform, explained and calculated.
+Working demo of every phase in *TAX.NG Product Requirements and Technical
+Architecture* ("the PRD"): the public reform site and calculators (Phase 1),
+personal compliance and advisers (Phase 2), business workspaces, e-invoicing,
+billing, academy and publishing (Phase 3), and filing, ERP connectors, the
+public API and account-aware Tax AI (Phase 4). External integrations run as
+labelled sandbox adapters until credentials and accreditation exist.
+
+| Phase | Modules (backend/taxng/modules, frontend/src/modules) |
+|---|---|
+| 1 | Core: rules engine, calculators, legal library, reform guides, Tax AI, news, newsletter, analytics |
+| 2 | `compliance` (profile, obligations engine, health check, CGT and stamp duty), `advisory` (directory, verification, bookings, consents) |
+| 3 | `workspace` (organisations, roles, calendar, returns, maker-checker, vault, reconciliation), `einvoicing`, `billing`, `academy`, `publishing` (contributors, editorial, sponsorship, ads, editions), `channels` (WhatsApp, localisation) |
+| 4 | `workspace` filing adapter, `developer` (API keys, /api/v1, OpenAPI, webhooks, ERP connectors), AI-04 account-aware Tax AI (`backend/taxng/ai/account_routes.py`) |
+
+The platform layer (sign-in, sessions, tenancy, audit chain, files, adapters)
+lives in `backend/taxng/platform`. How modules plug in: [docs/MODULES.md](docs/MODULES.md).
+Demo data: `cd backend && python -m taxng seed` (accounts listed in `backend/taxng/seed.py`).
 
 Owned and licensed by **Astound Innovation Hub**. © 2026. All rights reserved.
 
@@ -32,7 +47,7 @@ Requirements: Python 3.11+, Node 20+.
 
 ```bash
 make install     # pip install -e backend[dev]; npm install in frontend
-make test        # 46 backend tests, incl. 18 legislative worked examples
+make test        # 294 backend tests, incl. legislative worked examples
 make web         # build the frontend into frontend/dist
 make run         # http://127.0.0.1:8000
 ```

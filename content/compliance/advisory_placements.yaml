@@ -1,0 +1,8 @@
+# Commercial terms for sponsored adviser listings (ADV-04), read by the advisory module.
+# [TBC] All values are placeholders pending commercial sign-off. Move this file to
+# content/advisory/ once that directory is assigned to the advisory module.
+sponsored_listing:
+  status: "[TBC]"
+  description: "[TBC] Sponsored listing in the adviser directory"
+  price_kobo: 2500000  # [TBC]
+  duration_days: 30  # [TBC]

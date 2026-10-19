@@ -1,0 +1,83 @@
+# Personal income tax obligations of individuals (format: _format.yaml).
+# Due dates are unverified until a legal reviewer confirms them against the
+# Nigeria Tax Administration Act 2025.
+
+- id: pit.self_assessment
+  tax: pit
+  title: Annual personal income tax self-assessment return
+  frequency: annual
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: secondary_source
+  applies_if:
+    all:
+      - {fact: entity_type, in: [individual, sole_proprietor], label: You are an individual taxpayer}
+      - any:
+          - {fact: entity_type, eq: sole_proprietor, label: you trade as a sole proprietor}
+          - {fact: has_business_income, eq: true, label: you have business or self-employment income}
+          - {fact: has_rental_income, eq: true, label: you receive rental income}
+          - {fact: has_foreign_income, eq: true, label: you receive foreign income}
+          - {fact: has_capital_gains, eq: true, label: you made chargeable gains}
+  due:
+    rule: months_after_period_end
+    months: 3
+    review_status: unverified
+  provision: ntaa2025.pit.self_assessment
+  evidence:
+    - Records of every income source for the year (bank statements, invoices, contracts)
+    - Evidence of deductions and reliefs claimed
+    - Withholding tax credit notes received
+    - Copy of the filed return and acknowledgement
+  guide: tax-health-check
+  calculator: pit
+  specialism: pit
+
+- id: pit.rental_income
+  tax: pit
+  title: Rental income reported in the annual return
+  frequency: annual
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: unverified
+  applies_if:
+    all:
+      - {fact: entity_type, in: [individual, sole_proprietor], label: You are an individual taxpayer}
+      - {fact: has_rental_income, eq: true, label: you receive rental income}
+  due:
+    rule: months_after_period_end
+    months: 3
+    review_status: unverified
+  provision: nta2025.pit.rental_income
+  evidence:
+    - Tenancy agreements for each property let
+    - Rent receipts or bank records of rent received
+    - Withholding tax credit notes from corporate tenants
+    - Records of repairs and other allowable property expenses
+  guide: tax-health-check
+  calculator: pit
+  specialism: pit
+
+- id: cgt.individual_gains
+  tax: cgt
+  title: Chargeable gains reported in the annual return
+  frequency: annual
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: unverified
+  applies_if:
+    all:
+      - {fact: entity_type, in: [individual, sole_proprietor], label: You are an individual taxpayer}
+      - {fact: has_capital_gains, eq: true, label: you disposed of assets at a gain}
+  due:
+    rule: months_after_period_end
+    months: 3
+    review_status: unverified
+  provision: nta2025.cgt.individuals
+  evidence:
+    - Purchase documents showing the cost of each asset disposed of
+    - Sale agreements showing the disposal proceeds
+    - Receipts for allowable expenses of buying and selling
+  note: Taxing individuals' gains at personal income tax rates is pending legal review.
+  guide: capital-gains-2026
+  calculator: cgt
+  specialism: cgt

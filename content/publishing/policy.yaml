@@ -1,0 +1,77 @@
+# Sponsored publishing and advertising policy (PRD sections 6 and 7, Annex B).
+# Published at /advertise. Commercial prices are placeholders until validated:
+# never put a price in code.
+
+terms_version: "2026-10-draft"
+
+# SPON-04: sponsored publishing and display advertising open only once the
+# newsletter has this many active subscribers. Override for demos with the
+# environment variable TAXNG_SPONSOR_THRESHOLD.
+audience_threshold: 20000
+
+labels:
+  sponsored: Sponsored
+  paid_partnership: Paid Partnership
+  advertisement: Advertisement
+
+rate_card:
+  - id: sponsored_article
+    name: Sponsored article
+    description: One article written or commissioned by a sponsor, edited by tax.ng and labelled Sponsored on every surface.
+    price: "[TBC] to be set after validation"
+  - id: newsletter_sponsor
+    name: Newsletter sponsor slot
+    description: One labelled sponsor slot in a weekly Nigerian Tax Brief or Global Tax Watch edition.
+    price: "[TBC] to be set after validation"
+  - id: display_home_sidebar
+    name: Display placement, home page sidebar
+    description: Direct-sold display placement on the public home page.
+    price: "[TBC] to be set after validation"
+  - id: display_article_inline
+    name: Display placement, inside articles
+    description: Direct-sold display placement inside public articles and news pages.
+    price: "[TBC] to be set after validation"
+
+placement_policy:
+  - Advertising appears only on public pages, never inside the signed-in app.
+  - No advertising on sensitive screens such as the tax health check, calculators, Tax AI, filing or account pages.
+  - Ads are never targeted. tax.ng does not use health-check, compliance, account or any other confidential data to choose an ad.
+  - Impression and click counts are aggregate daily totals and hold no personal data.
+  - Every creative is reviewed by tax.ng staff before it can run.
+
+disclosure_rules:
+  - Paid content cannot be published until a disclosure record names the sponsor and the funding relationship.
+  - Where the content is an advertisement that needs vetting, an ARCON vetting reference is recorded before publication.
+  - Paid content carries a Sponsored or Paid Partnership label in lists, on the article page, in search, in newsletters, in RSS and in social previews.
+  - Editorial approval is independent of payment. Payment never buys approval and never publishes content.
+  - Contributors declare conflicts of interest, sponsorship and any use of AI tools when they submit.
+
+rejection_and_refund:
+  - tax.ng may reject any sponsorship or advertisement that is misleading, unlawful or inconsistent with editorial standards.
+  - If tax.ng rejects an order after payment and before publication, the payment is refunded in full.
+  - Once content is published, tax.ng may withdraw it to correct a breach of these terms. A tombstone page records the withdrawal.
+
+# Public paths where no ad may ever render (prefix match).
+sensitive_paths:
+  - /app
+  - /health-check
+  - /calculators
+  - /ask
+  - /file-pay
+  - /account
+  - /compliance
+  - /workspaces
+
+slots:
+  home_sidebar:
+    label: Home page sidebar
+    pages: ["/"]
+  article_inline:
+    label: Inside articles
+    pages: ["/insights", "/news"]
+  news_sidebar:
+    label: News sidebar
+    pages: ["/news"]
+  newsletter:
+    label: Newsletter edition
+    pages: ["/newsletter/archive"]

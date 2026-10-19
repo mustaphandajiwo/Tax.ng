@@ -1,0 +1,20 @@
+# Trainer profiles (ACAD-01). These are SAMPLE profiles for the demo. Real
+# trainers are added only after their credentials are checked; until then the
+# UI labels every profile "Sample profile". No CPD or professional-body claim
+# may appear here: CPD status comes only from staff approval (ACAD-02).
+
+- id: employment-tax-faculty
+  name: Employment Tax Faculty
+  sample: true
+  headline: Payroll and personal income tax
+  bio:
+    - The employment tax faculty writes and maintains the tax.ng courses on PAYE, payroll compliance and personal income tax.
+    - Every lesson is checked against the rules engine and the legal library before release. Named trainers and their credentials will be published once verified.
+
+- id: indirect-tax-faculty
+  name: Indirect Tax Faculty
+  sample: true
+  headline: VAT, invoicing and records
+  bio:
+    - The indirect tax faculty covers VAT, e-invoicing and the record keeping that supports both.
+    - Content is drafted from public guidance and secondary sources and is marked for legal review until a reviewer signs it off.

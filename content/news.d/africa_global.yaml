@@ -1,0 +1,48 @@
+# Africa and Global news sections (NEWS-01). Sample items only: each is flagged
+# `sample: true` and links to the organisation's own page. An editor replaces
+# them with dated, checked items before any public release. No figures.
+
+- id: ataf-african-tax-outlook
+  date: 2026-10-01
+  section: africa
+  headline: ATAF's African Tax Outlook tracks revenue trends across member administrations
+  standfirst: The African Tax Administration Forum's flagship publication compares tax revenue and administration data reported by participating African revenue authorities.
+  source_name: African Tax Administration Forum (ATAF)
+  source_url: https://www.ataftax.org/african-tax-outlook
+  sample: true
+
+- id: ataf-regional-cooperation
+  date: 2026-09-15
+  section: africa
+  headline: African revenue authorities continue cooperation through ATAF
+  standfirst: ATAF supports its members on domestic resource mobilisation, international tax rules, exchange of information and administrative capacity.
+  source_name: African Tax Administration Forum (ATAF)
+  source_url: https://www.ataftax.org/
+  sample: true
+
+- id: un-tax-convention-negotiations
+  date: 2026-10-05
+  section: global
+  headline: Negotiations continue on a UN Framework Convention on International Tax Cooperation
+  standfirst: An intergovernmental negotiating committee is drafting the convention and early protocols under a mandate from the UN General Assembly.
+  source_name: UN Department of Economic and Social Affairs, Financing for Sustainable Development Office
+  source_url: https://financing.desa.un.org/document/intergovernmental-negotiating-committee-united-nations-framework-convention-international
+  sample: true
+
+- id: un-tax-committee
+  date: 2026-09-20
+  section: global
+  headline: UN Tax Committee guidance remains a reference for developing countries
+  standfirst: The Committee of Experts on International Cooperation in Tax Matters maintains the UN Model Double Taxation Convention and practical manuals used by many African administrations.
+  source_name: UN Committee of Experts on International Cooperation in Tax Matters
+  source_url: https://financing.desa.un.org/what-we-do/ECOSOC/tax-committee/about
+  sample: true
+
+- id: oecd-global-minimum-tax
+  date: 2026-09-01
+  section: global
+  headline: More jurisdictions apply the OECD global minimum tax rules
+  standfirst: Under the Inclusive Framework's Pillar Two, large multinational groups face top-up taxes where their effective tax rate in a jurisdiction falls below the agreed minimum.
+  source_name: OECD
+  source_url: https://www.oecd.org/en/topics/sub-issues/global-minimum-tax.html
+  sample: true

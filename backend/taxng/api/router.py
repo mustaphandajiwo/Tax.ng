@@ -47,6 +47,7 @@ class Request:
     headers: dict[str, str] = field(default_factory=dict)  # lower-case names
     cookies: dict[str, str] = field(default_factory=dict)
     principal: Principal | None = None
+    raw_body: bytes | None = None  # exact bytes received, for webhook signatures
 
 
 @dataclass
@@ -116,7 +117,9 @@ def _resolve_principal(services: Services, request: Request) -> None:
             return
     auth_header = request.headers.get("authorization", "")
     resolver = services.hooks.get("api_key")
-    if auth_header.lower().startswith("bearer ") and resolver:
+    # API keys authenticate the versioned public API only; session routes never
+    # accept them, so a key cannot reach account or workspace endpoints.
+    if auth_header.lower().startswith("bearer ") and resolver and request.path.startswith("/api/v1/"):
         request.principal = resolver(services, auth_header[7:].strip())
 
 

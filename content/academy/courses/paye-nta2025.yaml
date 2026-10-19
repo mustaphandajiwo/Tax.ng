@@ -1,0 +1,234 @@
+# Starter course (ACAD-01). Lesson text states no figures: where a rate, band
+# or cap matters, the lesson lists the rules parameter and the platform renders
+# its value from the rules engine when the lesson is served.
+# Quiz answers and explanations are never sent to the browser before a learner
+# submits; grading happens on the server.
+
+id: paye-nta2025
+title: PAYE under the Nigeria Tax Act 2025
+summary: How employers work out, deduct and remit PAYE from 1 January 2026, and what changed from the old law.
+level: Introductory
+audience: [payroll officers, HR teams, accountants, employees]
+duration_hours: 3
+trainer: employment-tax-faculty
+review_status: secondary_source
+review_note: Drafted from PwC Worldwide Tax Summaries and public commentary on the 2025 reform acts. Not yet checked by a legal reviewer against the gazetted text.
+price:
+  model: free
+cohorts:
+  - id: paye-self-paced
+    label: Self-paced
+    starts_on: null
+    capacity: null
+  - id: paye-2027-q1
+    label: Live cohort, first quarter 2027
+    starts_on: 2027-01-18
+    capacity: 40
+
+modules:
+  - id: m1
+    title: What changed in 2026
+    lessons:
+      - id: m1-l1
+        title: From PITA to the Nigeria Tax Act
+        provisions: [ntaa2025.commencement, pita.rates, nta2025.pit.rates]
+        parameters: [pit.regime]
+        body:
+          - From 1 January 2026, personal income tax, including tax deducted through PAYE, is charged under the Nigeria Tax Act 2025. The Personal Income Tax Act continues to govern tax years before 2026, so payroll teams correcting an earlier year still apply the old rules.
+          - Administration moves to the Nigeria Tax Administration Act 2025, which sets out registration, returns, deadlines and penalties for every tax. The Nigeria Revenue Service replaces the Federal Inland Revenue Service at federal level. State internal revenue services still collect PAYE for employees resident in their state.
+          - The regime the platform applies for any tax year is itself a rule in the engine. The figure panel beside this lesson shows the regime in force for the current year.
+      - id: m1-l2
+        title: The end of the consolidated relief allowance
+        provisions: [pita.cra, nta2025.pit.rent_relief]
+        parameters: [pit.nta2025.rent_relief.rate, pit.nta2025.rent_relief.cap]
+        body:
+          - Under the old law, every employee received a consolidated relief allowance before tax was worked out. The new Act removes it. In its place, a tenant can claim rent relief on rent paid for the home they live in.
+          - Rent relief is a share of annual rent paid, up to an annual cap. Both the share and the cap are shown in the figure panel from the rules engine. Homeowners do not claim it.
+          - Because the allowance has gone, an employee's chargeable income can rise even when gross pay stays the same. Whether tax rises or falls depends on the new bands, covered in the next module.
+    quiz:
+      id: m1-quiz
+      pass_mark_percent: 60
+      questions:
+        - id: q1
+          prompt: Which law governs PAYE for the 2026 tax year?
+          options:
+            - {id: a, text: The Personal Income Tax Act}
+            - {id: b, text: The Nigeria Tax Act 2025}
+            - {id: c, text: The Companies Income Tax Act}
+          answer: b
+          explanation: The Nigeria Tax Act 2025 applies from 1 January 2026. The Personal Income Tax Act still applies to earlier tax years.
+        - id: q2
+          prompt: What replaces the consolidated relief allowance for an employee who rents their home?
+          options:
+            - {id: a, text: Nothing replaces it}
+            - {id: b, text: A housing allowance paid by the employer}
+            - {id: c, text: Rent relief on rent paid for the home they live in}
+          answer: c
+          explanation: Rent relief lets a tenant deduct a share of the rent they pay, up to an annual cap set in the rules.
+        - id: q3
+          prompt: Who collects PAYE deducted from an employee resident in Kano State?
+          options:
+            - {id: a, text: The Kano State Internal Revenue Service}
+            - {id: b, text: The Nigeria Revenue Service}
+            - {id: c, text: The employer keeps it until year end}
+          answer: a
+          explanation: PAYE on employment income is collected by the state of the employee's residence. The Nigeria Revenue Service administers federal taxes.
+
+  - id: m2
+    title: Working out the tax
+    lessons:
+      - id: m2-l1
+        title: Gross income and allowable deductions
+        provisions: [nta2025.pit.deductions]
+        parameters: [pit.nta2025.allowed_deductions]
+        body:
+          - Start with gross employment income for the year. It includes salary, allowances, bonuses and benefits in kind, valued as the rules require.
+          - Subtract the deductions the Act allows. The list in the figure panel comes from the rules engine. Each deduction needs evidence, such as pension schedules, National Housing Fund records or an insurance policy.
+          - Then subtract rent relief if the employee rents their home and has given the employer evidence of rent paid. What remains is chargeable income.
+      - id: m2-l2
+        title: Applying the bands
+        provisions: [nta2025.pit.rates]
+        parameters: [pit.nta2025.rates]
+        body:
+          - Chargeable income is taxed in bands. The first band is taxed at a zero rate, and each higher band carries a higher rate. Only the income inside a band is taxed at that band's rate.
+          - The bands and rates in the figure panel come from the rules engine for the current tax year. Never copy them into a spreadsheet by hand; use the calculator or the platform worksheet, which records the rules version used.
+          - Annual tax divided by twelve gives the monthly PAYE to deduct for an employee paid evenly through the year. When pay changes during the year, recompute on the year-to-date figures so the total stays correct.
+    quiz:
+      id: m2-quiz
+      pass_mark_percent: 60
+      questions:
+        - id: q1
+          prompt: Which of these is part of gross employment income?
+          options:
+            - {id: a, text: A benefit in kind such as a company car}
+            - {id: b, text: Rent the employee pays to a landlord}
+            - {id: c, text: The employer's own pension contribution to a third party}
+          answer: a
+          explanation: Benefits in kind are part of employment income and are valued under the rules. Rent paid is relevant only to rent relief.
+        - id: q2
+          prompt: How is tax applied to chargeable income?
+          options:
+            - {id: a, text: The highest rate the employee reaches applies to all income}
+            - {id: b, text: Each band of income is taxed at its own rate}
+            - {id: c, text: One flat rate applies to everyone}
+          answer: b
+          explanation: Tax is marginal. Only the slice of income inside each band is taxed at that band's rate.
+        - id: q3
+          prompt: Why should payroll teams avoid typing the bands into their own spreadsheet?
+          options:
+            - {id: a, text: Spreadsheets cannot do arithmetic on bands}
+            - {id: b, text: The law forbids spreadsheets}
+            - {id: c, text: Copied figures go stale and cannot show which rules version was used}
+          answer: c
+          explanation: Rules change by date. The engine records which version produced each result, which a hand-copied table cannot do.
+
+  - id: m3
+    title: Employer obligations
+    lessons:
+      - id: m3-l1
+        title: Deduct, remit and keep records
+        provisions: [nrs2025.establishment, ntaa2025.commencement]
+        parameters: []
+        body:
+          - An employer must register for PAYE with the relevant state tax authority, deduct tax from each employee's pay, and remit it by the due date set under the Nigeria Tax Administration Act 2025. The tax.ng obligations calendar shows each due date from the rules.
+          - Keep payroll records, deduction evidence and remittance receipts for every employee. An employer that fails to deduct or remit is liable for the tax and for penalties and interest.
+          - At year end, file the annual employer return with the state tax authority. It reconciles what was deducted with what was remitted for each employee.
+      - id: m3-l2
+        title: Common errors and how to avoid them
+        provisions: [nta2025.pit.deductions, nta2025.pit.rent_relief]
+        parameters: [pit.nta2025.rent_relief.cap]
+        body:
+          - Applying rent relief without evidence. Ask for a tenancy agreement and receipts before you reduce PAYE, and keep copies.
+          - Using the old consolidated relief allowance for a 2026 payroll. Check that payroll software has been updated to the new regime.
+          - Remitting to the wrong state. PAYE follows the employee's state of residence, not the location of the head office.
+          - Ignoring mid-year changes. A pay rise, a new deduction or a change of address can change the monthly figure.
+    quiz:
+      id: m3-quiz
+      pass_mark_percent: 60
+      questions:
+        - id: q1
+          prompt: An employee lives in Ogun State and works at a Lagos office. Where does the employer remit PAYE?
+          options:
+            - {id: a, text: Lagos State, where the office is}
+            - {id: b, text: Ogun State, where the employee lives}
+            - {id: c, text: The Nigeria Revenue Service}
+          answer: b
+          explanation: PAYE on employment income follows the employee's state of residence.
+        - id: q2
+          prompt: What should an employer hold before applying rent relief through PAYE?
+          options:
+            - {id: a, text: Evidence of rent paid, such as a tenancy agreement and receipts}
+            - {id: b, text: Nothing; the employee's word is enough}
+            - {id: c, text: A letter from the landlord's bank}
+          answer: a
+          explanation: Relief must be supported by evidence, and the employer should keep copies.
+
+assessment:
+  id: final
+  pass_mark_percent: 70
+  questions:
+    - id: f1
+      prompt: From which date does the Nigeria Tax Act 2025 govern PAYE?
+      options:
+        - {id: a, text: 1 January 2025}
+        - {id: b, text: 1 January 2026}
+        - {id: c, text: The date each state adopts it}
+      answer: b
+      explanation: The Act applies to tax years from 1 January 2026.
+    - id: f2
+      prompt: Which relief no longer applies under the new Act?
+      options:
+        - {id: a, text: The consolidated relief allowance}
+        - {id: b, text: Pension contributions}
+        - {id: c, text: Mortgage interest on an owner-occupied home}
+      answer: a
+      explanation: The consolidated relief allowance was removed. Pension contributions and mortgage interest on an owner-occupied home remain deductible.
+    - id: f3
+      prompt: Where should a payroll team read the current PAYE bands?
+      options:
+        - {id: a, text: From last year's payroll file}
+        - {id: b, text: From a newspaper summary}
+        - {id: c, text: From the rules engine, which records the version used}
+      answer: c
+      explanation: The rules engine holds effective-dated values and records the rules version for every result.
+    - id: f4
+      prompt: An employee buys and moves into their own home. What happens to rent relief?
+      options:
+        - {id: a, text: It continues at the same level}
+        - {id: b, text: It stops; they may instead deduct mortgage interest on the home}
+        - {id: c, text: It doubles}
+      answer: b
+      explanation: Rent relief is for tenants. A homeowner may deduct mortgage interest on an owner-occupied home.
+    - id: f5
+      prompt: An employer deducted PAYE but did not remit it. Who bears the liability?
+      options:
+        - {id: a, text: The employee}
+        - {id: b, text: Nobody, if the employee has left}
+        - {id: c, text: The employer, with penalties and interest}
+      answer: c
+      explanation: The employer holds deducted tax for the tax authority and is liable if it fails to remit.
+    - id: f6
+      prompt: Which document reconciles PAYE deducted and remitted for the year?
+      options:
+        - {id: a, text: The annual employer return}
+        - {id: b, text: The VAT return}
+        - {id: c, text: The company's audited accounts}
+      answer: a
+      explanation: The annual employer return reconciles deductions and remittances employee by employee.
+
+case_study:
+  title: Kemi's first payroll under the new Act
+  calculator: pit-compare
+  scenario:
+    - Kemi runs payroll for a small design studio with staff in Lagos and Ogun States. In January 2026 she must run the first payroll under the Nigeria Tax Act 2025.
+    - Two employees rent their homes and have sent tenancy agreements. One employee has just bought a house with a mortgage. Another has asked whether the removal of the consolidated relief allowance means her tax will go up.
+  tasks:
+    - Decide which employees can claim rent relief and what evidence Kemi should keep.
+    - Explain to the employee with a mortgage which deduction may apply instead.
+    - Use the old-versus-new comparison calculator with the employee's own salary to answer her question. Do not quote a figure without the calculator result.
+    - List where Kemi must remit PAYE for each employee.
+  discussion:
+    - Rent relief applies to the two tenants with evidence. Keep copies of the tenancy agreements and receipts with payroll records.
+    - The homeowner does not claim rent relief but may deduct mortgage interest on an owner-occupied home.
+    - Whether tax rises or falls depends on income level and deductions. The comparison calculator shows the change for her salary from the rules engine.
+    - PAYE goes to the state of residence of each employee, so Kemi remits to both Lagos and Ogun States.

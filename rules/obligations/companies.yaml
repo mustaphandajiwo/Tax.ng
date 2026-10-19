@@ -1,0 +1,75 @@
+# Company obligations (format: _format.yaml). Small companies still file.
+# The accounting period is assumed to be the calendar year.
+
+- id: cit.annual_return
+  tax: cit
+  title: Companies income tax annual return
+  frequency: annual
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: secondary_source
+  applies_if: {fact: entity_type, eq: company, label: You are a company}
+  due:
+    rule: months_after_period_end
+    months: 6
+    review_status: unverified
+  provision: ntaa2025.cit.returns
+  evidence:
+    - Audited financial statements (or management accounts) for the period
+    - Tax computation and capital allowance schedules
+    - Copy of the filed return and acknowledgement
+  note: Small companies pay at a zero rate but still file the return.
+  guide: small-companies
+  calculator: cit
+  specialism: cit
+
+- id: cit.development_levy
+  tax: cit
+  title: Development levy, paid with the CIT return
+  frequency: annual
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: secondary_source
+  applies_if:
+    all:
+      - {fact: entity_type, eq: company, label: You are a company}
+      - {not: {fact: non_resident, eq: true}, label: you are resident in Nigeria}
+      - any:
+          - {fact: annual_turnover, gt: {param: cit.small_company.turnover_ceiling}, label: your turnover is above the small company ceiling}
+          - {fact: fixed_assets, gt: {param: cit.small_company.fixed_assets_ceiling}, label: your fixed assets are above the small company ceiling}
+          - {fact: is_professional_services, eq: true, label: "you provide professional services, which cannot qualify as small"}
+  due:
+    rule: months_after_period_end
+    months: 6
+    review_status: unverified
+  provision: nta2025.development_levy
+  evidence:
+    - Computation of assessable profits
+    - Payment receipt for the levy
+  guide: development-levy
+  calculator: cit
+  specialism: cit
+
+- id: cgt.company_gains
+  tax: cgt
+  title: Chargeable gains reported with the CIT return
+  frequency: annual
+  valid_from: 2026-01-01
+  valid_to: null
+  review_status: secondary_source
+  applies_if:
+    all:
+      - {fact: entity_type, eq: company, label: You are a company}
+      - {fact: has_capital_gains, eq: true, label: you disposed of assets at a gain}
+  due:
+    rule: months_after_period_end
+    months: 6
+    review_status: unverified
+  provision: nta2025.cgt.companies
+  evidence:
+    - Acquisition cost records for each asset disposed of
+    - Sale agreements showing the disposal proceeds
+    - Schedule of share disposals in each twelve-month window, where the share exemption is claimed
+  guide: capital-gains-2026
+  calculator: cgt
+  specialism: cgt
