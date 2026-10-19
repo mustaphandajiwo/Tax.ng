@@ -1,7 +1,7 @@
 // Bundles src/ into dist/ with esbuild. No framework build step, no CDN:
 // everything is served from the app's own origin to satisfy the strict CSP.
 import { build, context } from "esbuild";
-import { cpSync, mkdirSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 const watch = process.argv.includes("--watch");
 
@@ -10,7 +10,11 @@ mkdirSync("dist/assets", { recursive: true });
 mkdirSync("dist/app", { recursive: true });
 cpSync("public/index.html", "dist/index.html");
 cpSync("public/app.html", "dist/app/index.html");
-cpSync("src/styles.css", "dist/assets/styles.css");
+// One stylesheet: core styles plus each module's src/modules/<name>/<name>.css.
+const moduleCss = readdirSync("src/modules", { withFileTypes: true })
+  .filter((d) => d.isDirectory() && existsSync(`src/modules/${d.name}/${d.name}.css`))
+  .map((d) => `/* module: ${d.name} */\n` + readFileSync(`src/modules/${d.name}/${d.name}.css`, "utf8"));
+writeFileSync("dist/assets/styles.css", [readFileSync("src/styles.css", "utf8"), ...moduleCss].join("\n"));
 
 const options = {
   // Two bundles: the public site and the signed-in app (ADR-06).

@@ -101,9 +101,9 @@ If a test depends on another module that may not exist yet, use
   `components/Figures.tsx` and `app/core.tsx` (`PageHead`). Reuse the existing
   CSS classes: `card`, `cards`, `grid-2`, `table`, `table-wrap`, `list`,
   `pill pill--ok|warn|bad|muted`, `btn btn--ghost|small|danger`, `tabs`,
-  `field`, `notice`, `sponsored-label`, `ad-slot`. Add new CSS only in
-  `src/modules/<name>/` as a `<name>.css` imported by `site.tsx` or `app.tsx`
-  (esbuild bundles it).
+  `field`, `notice`, `sponsored-label`, `ad-slot`. Put any new CSS in
+  `src/modules/<name>/<name>.css`. Don't import it from TypeScript;
+  `build.mjs` appends every module stylesheet to `styles.css`.
 - App routes are relative to `/app` (for example `"/workspaces/:orgId/returns"`).
   `AppContext` provides `me`, `meta`, `orgId`, `org`, `setOrgId`,
   `refreshMe` and `params`. Show sandbox mode wherever an adapter result is
