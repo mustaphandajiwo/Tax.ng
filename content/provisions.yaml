@@ -1,0 +1,274 @@
+# Legal library seed corpus (LAW-01, LAW-02).
+#
+# Rules for this file:
+#  - Summaries are plain-language and contain NO money amounts or percentages.
+#    Figures are always read from the rules engine through `parameters`, so the
+#    library, calculators and Tax AI cannot disagree (CALC-07, AI-03).
+#  - `section` stays "[to be confirmed]" until a legal reviewer checks the
+#    gazetted text. The demo never invents a section number.
+#  - `review_status` uses the same scale as rule parameters.
+
+- id: nta2025.pit.rates
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Personal income tax rates
+  tax: pit
+  effective_from: 2026-01-01
+  summary: >-
+    Chargeable income of individuals is taxed in progressive bands. The first
+    band is taxed at a zero rate, so low earners pay no personal income tax.
+    The consolidated relief allowance used under the old law no longer applies.
+  keywords: [paye, salary, income, employee, bands, rates, personal]
+  parameters: [pit.nta2025.rates]
+  review_status: secondary_source
+
+- id: nta2025.pit.rent_relief
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Rent relief for individuals
+  tax: pit
+  effective_from: 2026-01-01
+  summary: >-
+    An individual who pays rent on their home may deduct a share of the annual
+    rent paid, up to a fixed annual cap. Evidence of rent paid should be kept.
+  keywords: [rent, relief, housing, tenant, landlord, accommodation]
+  parameters: [pit.nta2025.rent_relief.rate, pit.nta2025.rent_relief.cap]
+  review_status: secondary_source
+
+- id: nta2025.pit.deductions
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Allowable deductions for individuals
+  tax: pit
+  effective_from: 2026-01-01
+  summary: >-
+    Contributions to an approved pension scheme, National Housing Fund
+    contributions, life insurance premiums and mortgage interest on an
+    owner-occupied home are deductible, each supported by documentary evidence.
+    Treatment of health insurance contributions is pending confirmation.
+  keywords: [pension, nhf, housing fund, life insurance, mortgage, nhis, deduction]
+  parameters: [pit.nta2025.allowed_deductions]
+  review_status: unverified
+
+- id: nta2025.cit.small_company
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Small company classification
+  tax: cit
+  effective_from: 2026-01-01
+  summary: >-
+    A company is a small company where both its annual gross turnover and its
+    total fixed assets are at or below the prescribed ceilings. Small companies
+    pay companies income tax at a zero rate and are outside the development
+    levy. Whether professional services firms are excluded is pending review.
+  keywords: [small, company, sme, turnover, fixed assets, exemption, business]
+  parameters:
+    - cit.small_company.turnover_ceiling
+    - cit.small_company.fixed_assets_ceiling
+    - cit.rate.small
+  review_status: secondary_source
+
+- id: nta2025.cit.rate
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Companies income tax rate
+  tax: cit
+  effective_from: 2026-01-01
+  summary: >-
+    Companies that are not small companies pay companies income tax on their
+    total profits at the standard rate.
+  keywords: [company, corporate, cit, profits, rate, business]
+  parameters: [cit.rate.other]
+  review_status: secondary_source
+
+- id: nta2025.development_levy
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Development levy
+  tax: cit
+  effective_from: 2026-01-01
+  summary: >-
+    Companies other than small companies and non-resident companies pay a
+    development levy on assessable profits. It replaces the tertiary education
+    tax, the NITDA levy, the NASENI levy and the Police Trust Fund levy.
+  keywords: [levy, development, tertiary education, nitda, naseni, police]
+  parameters: [cit.development_levy.rate]
+  review_status: secondary_source
+
+- id: nta2025.minimum_etr
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Minimum effective tax rate
+  tax: cit
+  effective_from: 2026-01-01
+  summary: >-
+    Large Nigerian companies, and members of large multinational groups, must
+    pay additional tax where their effective tax rate falls below the minimum.
+  keywords: [minimum, effective tax rate, etr, multinational, top-up, large]
+  parameters: [cit.minimum_etr.turnover_threshold, cit.minimum_etr.rate]
+  review_status: secondary_source
+
+- id: nta2025.vat.rate
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: VAT standard rate
+  tax: vat
+  effective_from: 2026-01-01
+  summary: >-
+    Taxable supplies of goods and services are charged VAT at the standard
+    rate unless they are zero-rated or exempt.
+  keywords: [vat, value added tax, rate, goods, services, invoice]
+  parameters: [vat.standard_rate]
+  review_status: secondary_source
+
+- id: nta2025.vat.zero_rated
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Zero-rated supplies
+  tax: vat
+  effective_from: 2026-01-01
+  summary: >-
+    Zero-rated supplies carry VAT at a zero rate. They include basic food
+    items, medical and pharmaceutical products, educational books and
+    materials, and exported services. Suppliers may generally recover input VAT.
+  keywords: [zero rated, food, medical, pharmaceutical, education, books, export]
+  parameters: [vat.zero_rated_examples]
+  review_status: secondary_source
+
+- id: nta2025.vat.exempt
+  instrument: Nigeria Tax Act 2025
+  section: "[to be confirmed]"
+  title: Exempt supplies
+  tax: vat
+  effective_from: 2026-01-01
+  summary: >-
+    Exempt supplies are outside the charge to VAT. Input VAT on exempt supplies
+    is generally not recoverable.
+  keywords: [exempt, vat, free trade zone, export processing]
+  parameters: [vat.exempt_examples]
+  review_status: unverified
+
+- id: wht.regulations.rates
+  instrument: Withholding tax regulations (title to be confirmed)
+  section: "[to be confirmed]"
+  title: Withholding tax rates for resident recipients
+  tax: wht
+  effective_from: 2025-01-01
+  summary: >-
+    A payer deducts tax at source from qualifying payments and remits it to the
+    relevant tax authority. Rates differ by payment type and by whether the
+    recipient is a company or an individual.
+  keywords: [withholding, wht, deduction at source, dividends, rent, royalty, fees, contract]
+  parameters: [wht.rates.dividends_interest.corporate, wht.rates.professional_fees.corporate]
+  review_status: secondary_source
+
+- id: wht.regulations.no_tin
+  instrument: Withholding tax regulations (title to be confirmed)
+  section: "[to be confirmed]"
+  title: Recipients without a TIN
+  tax: wht
+  effective_from: 2025-01-01
+  summary: >-
+    Where the recipient has no tax identification number, the payer deducts at
+    a higher rate, subject to a cap. The surcharge does not apply to passive
+    income such as dividends.
+  keywords: [tin, tax identification number, surcharge, double rate]
+  parameters: [wht.no_tin.multiplier, wht.no_tin.cap]
+  review_status: secondary_source
+
+- id: wht.regulations.small_company
+  instrument: Withholding tax regulations (title to be confirmed)
+  section: "[to be confirmed]"
+  title: Small company exemption from deduction
+  tax: wht
+  effective_from: 2025-01-01
+  summary: >-
+    A small company paying a supplier with a valid TIN need not deduct
+    withholding tax on transactions below the prescribed value.
+  keywords: [small company, exemption, threshold, supplier, tin]
+  parameters: [wht.small_company_exemption.transaction_ceiling]
+  review_status: secondary_source
+
+- id: pita.rates
+  instrument: Personal Income Tax Act (as amended)
+  section: "[to be confirmed]"
+  title: Personal income tax rates (prior regime)
+  tax: pit
+  effective_from: 2011-01-01
+  effective_to: 2026-01-01
+  summary: >-
+    Up to the end of 2025, taxable income of individuals was taxed in six
+    progressive bands after the consolidated relief allowance.
+  keywords: [old law, pita, previous, 2025, bands, rates]
+  parameters: [pit.pita.rates]
+  review_status: secondary_source
+
+- id: pita.cra
+  instrument: Personal Income Tax Act (as amended)
+  section: "[to be confirmed]"
+  title: Consolidated relief allowance (prior regime)
+  tax: pit
+  effective_from: 2011-01-01
+  effective_to: 2026-01-01
+  summary: >-
+    Under the old law every individual received a consolidated relief allowance
+    made of a fixed element or a share of gross income, whichever was higher,
+    plus a further share of gross income.
+  keywords: [cra, consolidated relief allowance, old law, pita]
+  parameters: [pit.pita.cra.fixed_minimum, pit.pita.cra.floor_rate, pit.pita.cra.rate]
+  review_status: unverified
+
+- id: pita.minimum_tax
+  instrument: Personal Income Tax Act (as amended)
+  section: "[to be confirmed]"
+  title: Minimum tax (prior regime)
+  tax: pit
+  effective_from: 2011-01-01
+  effective_to: 2026-01-01
+  summary: >-
+    Under the old law, where the tax computed was below a minimum share of
+    gross income, the minimum tax was payable instead.
+  keywords: [minimum tax, old law, pita]
+  parameters: [pit.pita.minimum_tax.rate]
+  review_status: unverified
+
+- id: ntaa2025.commencement
+  instrument: Nigeria Tax Administration Act 2025
+  section: "[to be confirmed]"
+  title: Administration of the reformed tax system
+  tax: general
+  effective_from: 2026-01-01
+  summary: >-
+    The Nigeria Tax Administration Act 2025 sets common rules for registration,
+    returns, assessments, payment and enforcement across federal and state tax
+    authorities, alongside the substantive charges in the Nigeria Tax Act 2025.
+  keywords: [administration, filing, returns, registration, tin, reform, commencement, 2026]
+  parameters: [pit.regime]
+  review_status: secondary_source
+
+- id: nrs2025.establishment
+  instrument: Nigeria Revenue Service (Establishment) Act 2025
+  section: "[to be confirmed]"
+  title: Nigeria Revenue Service
+  tax: general
+  effective_from: 2025-06-26
+  summary: >-
+    The Act establishes the Nigeria Revenue Service as the federal revenue
+    authority, succeeding the Federal Inland Revenue Service.
+  keywords: [nrs, firs, revenue service, authority, federal]
+  parameters: []
+  review_status: unverified
+
+- id: jrb2025.establishment
+  instrument: Joint Revenue Board (Establishment) Act 2025
+  section: "[to be confirmed]"
+  title: Joint Revenue Board, Tax Ombud and Tax Appeal Tribunal
+  tax: general
+  effective_from: 2025-06-26
+  summary: >-
+    The Act establishes the Joint Revenue Board to coordinate federal, state and
+    local revenue administration, and provides for the Office of the Tax Ombud
+    and the Tax Appeal Tribunal.
+  keywords: [jrb, joint revenue board, ombud, tribunal, appeal, dispute, states]
+  parameters: []
+  review_status: unverified

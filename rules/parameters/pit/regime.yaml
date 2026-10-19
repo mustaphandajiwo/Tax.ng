@@ -1,0 +1,12 @@
+# Which personal income tax regime applies to a tax year.
+# The calculator reads this on 1 January of the requested year.
+description: Personal income tax regime in force
+metadata:
+  provision: ntaa2025.commencement
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/individual
+values:
+  2011-01-01:
+    value: pita
+  2026-01-01:
+    value: nta2025

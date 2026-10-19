@@ -1,0 +1,40 @@
+description: Value added tax
+metadata:
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/corporate/other-taxes
+
+standard_rate:
+  description: Standard VAT rate
+  metadata:
+    provision: nta2025.vat.rate
+    unit: /1
+  values:
+    2020-02-01: {value: 0.075}
+
+# Category lists are display data for the calculator. OpenFisca parameters are
+# numeric by convention; on migration these move to the country package's
+# reference data (see docs/DECISIONS.md, D1).
+zero_rated_examples:
+  description: Examples of zero-rated supplies
+  metadata:
+    provision: nta2025.vat.zero_rated
+  values:
+    2026-01-01:
+      value:
+        - Basic food items (prescribed list)
+        - Medical products and services
+        - Pharmaceutical products
+        - Books and educational materials
+        - Exported services
+        - Goods and services purchased by diplomats
+        - Goods for humanitarian donor-funded projects
+
+exempt_examples:
+  description: Examples of exempt supplies
+  metadata:
+    provision: nta2025.vat.exempt
+    review_status: unverified
+  values:
+    2026-01-01:
+      value:
+        - Plant and machinery for use in export processing or free trade zones

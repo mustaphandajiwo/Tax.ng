@@ -1,0 +1,21 @@
+# Nigeria news section seed (NEWS-01). Items are curated by hand in the CMS in
+# production; these placeholders are flagged `sample: true` and must be
+# replaced by editor-approved items before any public release.
+
+- id: reform-acts-commence
+  date: 2026-01-01
+  section: nigeria
+  headline: Reformed tax laws take effect
+  standfirst: The Nigeria Tax Act 2025 and the Nigeria Tax Administration Act 2025 now govern new tax years.
+  source_name: PwC Worldwide Tax Summaries
+  source_url: https://taxsummaries.pwc.com/nigeria/individual
+  sample: true
+
+- id: development-levy-replaces
+  date: 2026-01-01
+  section: nigeria
+  headline: Development levy replaces four company levies
+  standfirst: The tertiary education tax and three sector levies give way to a single levy on assessable profits.
+  source_name: PwC Worldwide Tax Summaries
+  source_url: https://taxsummaries.pwc.com/nigeria/corporate/taxes-on-corporate-income
+  sample: true

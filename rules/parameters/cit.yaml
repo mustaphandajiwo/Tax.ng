@@ -1,0 +1,62 @@
+# Companies income tax and development levy under the Nigeria Tax Act 2025.
+description: Companies income tax, Nigeria Tax Act 2025
+metadata:
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/corporate/taxes-on-corporate-income
+
+small_company:
+  metadata:
+    provision: nta2025.cit.small_company
+  turnover_ceiling:
+    description: Maximum annual gross turnover for a small company
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 100000000}
+  fixed_assets_ceiling:
+    description: Maximum total fixed assets for a small company
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 250000000}
+  excludes_professional_services:
+    description: Professional services businesses cannot qualify as small companies
+    metadata:
+      review_status: unverified
+    values:
+      2026-01-01: {value: true}
+
+rate:
+  metadata:
+    provision: nta2025.cit.rate
+  small:
+    description: CIT rate for small companies
+    metadata: {unit: /1}
+    values:
+      2026-01-01: {value: 0}
+  other:
+    description: CIT rate for companies that are not small
+    metadata: {unit: /1}
+    values:
+      2026-01-01: {value: 0.30}
+
+development_levy:
+  metadata:
+    provision: nta2025.development_levy
+  rate:
+    description: Development levy on assessable profits
+    metadata: {unit: /1}
+    values:
+      2026-01-01: {value: 0.04}
+
+minimum_etr:
+  metadata:
+    provision: nta2025.minimum_etr
+  turnover_threshold:
+    description: Turnover from which the minimum effective tax rate rules apply
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 50000000000}
+  rate:
+    description: Minimum effective tax rate
+    metadata: {unit: /1}
+    values:
+      2026-01-01: {value: 0.15}

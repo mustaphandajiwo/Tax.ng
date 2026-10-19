@@ -1,0 +1,82 @@
+# Withholding tax (deduction at source) on payments to Nigerian residents.
+# Rates transcribed from PwC Worldwide Tax Summaries (reviewed May 2026).
+# The regulation's exact title and commencement date are pending legal review,
+# so the effective date below is marked unverified.
+description: Withholding tax, resident recipients
+metadata:
+  provision: wht.regulations.rates
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/corporate/withholding-taxes
+  effective_date_status: unverified
+
+rates:
+  dividends_interest:
+    description: Dividends and interest
+    corporate: {values: {2025-01-01: {value: 0.10}}}
+    non_corporate: {values: {2025-01-01: {value: 0.10}}}
+  royalty:
+    description: Royalties
+    corporate: {values: {2025-01-01: {value: 0.10}}}
+    non_corporate: {values: {2025-01-01: {value: 0.05}}}
+  rent:
+    description: Rent, hire or lease
+    corporate: {values: {2025-01-01: {value: 0.10}}}
+    non_corporate: {values: {2025-01-01: {value: 0.10}}}
+  professional_fees:
+    description: Commission, consultancy, technical, management and professional fees
+    corporate: {values: {2025-01-01: {value: 0.05}}}
+    non_corporate: {values: {2025-01-01: {value: 0.05}}}
+  supply_of_goods:
+    description: Supply of goods or materials (not by the manufacturer or producer)
+    corporate: {values: {2025-01-01: {value: 0.02}}}
+    non_corporate: {values: {2025-01-01: {value: 0.02}}}
+  other_services:
+    description: Other services
+    corporate: {values: {2025-01-01: {value: 0.02}}}
+    non_corporate: {values: {2025-01-01: {value: 0.02}}}
+  construction_infrastructure:
+    description: Construction of roads, bridges, buildings and power plants
+    corporate: {values: {2025-01-01: {value: 0.02}}}
+    non_corporate: {values: {2025-01-01: {value: 0.02}}}
+  construction_other:
+    description: Other construction and related activities
+    corporate: {values: {2025-01-01: {value: 0.05}}}
+    non_corporate: {values: {2025-01-01: {value: 0.05}}}
+  brokerage:
+    description: Brokerage fees
+    corporate: {values: {2025-01-01: {value: 0.05}}}
+    non_corporate: {values: {2025-01-01: {value: 0.05}}}
+  directors_fees:
+    description: Directors' fees (individuals only)
+    non_corporate: {values: {2025-01-01: {value: 0.15}}}
+
+passive_types:
+  description: Payment types where the no-TIN surcharge does not apply
+  metadata:
+    provision: wht.regulations.no_tin
+    review_status: unverified
+  values:
+    2025-01-01:
+      value: [dividends_interest]
+
+no_tin:
+  metadata:
+    provision: wht.regulations.no_tin
+  multiplier:
+    description: Rate multiplier where the recipient has no TIN
+    values:
+      2025-01-01: {value: 2}
+  cap:
+    description: Maximum rate after the no-TIN surcharge
+    metadata: {unit: /1}
+    values:
+      2025-01-01: {value: 0.20}
+
+small_company_exemption:
+  metadata:
+    provision: wht.regulations.small_company
+  transaction_ceiling:
+    description: Transactions below this value are exempt when the payer is a small company and the recipient has a valid TIN
+    metadata: {unit: currency-NGN}
+    values:
+      2025-01-01: {value: 2000000}

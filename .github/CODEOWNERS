@@ -1,0 +1,5 @@
+# Two-person legal review for every rule change (PRD Annex A5).
+# Replace the placeholders with the named legal reviewers' GitHub handles and
+# enable "Require review from Code Owners" with 2 approvals on main.
+/rules/        @legal-reviewer-1 @legal-reviewer-2
+/content/      @tax-content-lead @editor

@@ -1,0 +1,74 @@
+# Personal income tax under the Personal Income Tax Act (as amended 2011),
+# used for tax years up to and including 2025. Retained for historic periods
+# and the old-versus-new comparison (CALC-05).
+description: Personal income tax, PITA (prior regime)
+metadata:
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/individual
+
+rates:
+  description: Annual PIT rates on taxable income
+  metadata:
+    provision: pita.rates
+    threshold_unit: currency-NGN
+    rate_unit: /1
+  brackets:
+    - threshold: {2011-01-01: {value: 0}, 2026-01-01: {value: null}}
+      rate: {2011-01-01: {value: 0.07}, 2026-01-01: {value: null}}
+    - threshold: {2011-01-01: {value: 300000}, 2026-01-01: {value: null}}
+      rate: {2011-01-01: {value: 0.11}, 2026-01-01: {value: null}}
+    - threshold: {2011-01-01: {value: 600000}, 2026-01-01: {value: null}}
+      rate: {2011-01-01: {value: 0.15}, 2026-01-01: {value: null}}
+    - threshold: {2011-01-01: {value: 1100000}, 2026-01-01: {value: null}}
+      rate: {2011-01-01: {value: 0.19}, 2026-01-01: {value: null}}
+    - threshold: {2011-01-01: {value: 1600000}, 2026-01-01: {value: null}}
+      rate: {2011-01-01: {value: 0.21}, 2026-01-01: {value: null}}
+    - threshold: {2011-01-01: {value: 3200000}, 2026-01-01: {value: null}}
+      rate: {2011-01-01: {value: 0.24}, 2026-01-01: {value: null}}
+
+# The CRA formula and minimum tax are not stated in the secondary source used
+# for the rates, so they carry "unverified" until legal review.
+cra:
+  metadata:
+    provision: pita.cra
+    review_status: unverified
+  fixed_minimum:
+    description: Fixed element of the consolidated relief allowance (floor)
+    metadata: {unit: currency-NGN}
+    values:
+      2011-01-01: {value: 200000}
+      2026-01-01: {value: null}
+  floor_rate:
+    description: Share of gross income compared with the fixed element
+    metadata: {unit: /1}
+    values:
+      2011-01-01: {value: 0.01}
+      2026-01-01: {value: null}
+  rate:
+    description: Share of gross income added to the higher of the two
+    metadata: {unit: /1}
+    values:
+      2011-01-01: {value: 0.20}
+      2026-01-01: {value: null}
+
+minimum_tax:
+  metadata:
+    provision: pita.minimum_tax
+    review_status: unverified
+  rate:
+    description: Minimum tax as a share of gross income
+    metadata: {unit: /1}
+    values:
+      2011-01-01: {value: 0.01}
+      2026-01-01: {value: null}
+
+allowed_deductions:
+  description: Tax-exempt deductions under PITA
+  metadata:
+    provision: pita.cra
+    review_status: unverified
+  values:
+    2011-01-01:
+      value: [pension, nhf, nhis, life_insurance]
+    2026-01-01:
+      value: null

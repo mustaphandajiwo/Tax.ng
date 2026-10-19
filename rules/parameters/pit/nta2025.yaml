@@ -1,0 +1,52 @@
+# Personal income tax under the Nigeria Tax Act 2025 (applies from 1 January 2026).
+# Figures transcribed from PwC Worldwide Tax Summaries (secondary source).
+# Status stays "secondary_source" until two legal reviewers sign off against the gazette.
+description: Personal income tax, Nigeria Tax Act 2025
+metadata:
+  review_status: secondary_source
+  reference: https://taxsummaries.pwc.com/nigeria/individual
+
+rates:
+  description: Annual PIT rates on chargeable income
+  metadata:
+    provision: nta2025.pit.rates
+    threshold_unit: currency-NGN
+    rate_unit: /1
+  brackets:
+    - threshold: {2026-01-01: {value: 0}}
+      rate: {2026-01-01: {value: 0}}
+    - threshold: {2026-01-01: {value: 800000}}
+      rate: {2026-01-01: {value: 0.15}}
+    - threshold: {2026-01-01: {value: 3000000}}
+      rate: {2026-01-01: {value: 0.18}}
+    - threshold: {2026-01-01: {value: 12000000}}
+      rate: {2026-01-01: {value: 0.21}}
+    - threshold: {2026-01-01: {value: 25000000}}
+      rate: {2026-01-01: {value: 0.23}}
+    - threshold: {2026-01-01: {value: 50000000}}
+      rate: {2026-01-01: {value: 0.25}}
+
+rent_relief:
+  metadata:
+    provision: nta2025.pit.rent_relief
+  rate:
+    description: Rent relief as a share of annual rent paid
+    metadata: {unit: /1}
+    values:
+      2026-01-01: {value: 0.20}
+  cap:
+    description: Maximum rent relief per year
+    metadata: {unit: currency-NGN}
+    values:
+      2026-01-01: {value: 500000}
+
+allowed_deductions:
+  description: Deductions allowed against gross income
+  metadata:
+    provision: nta2025.pit.deductions
+    # PwC confirms pension, NHF, life insurance and mortgage interest.
+    # NHIS is included pending confirmation, hence the weaker status.
+    review_status: unverified
+  values:
+    2026-01-01:
+      value: [pension, nhf, nhis, life_insurance, mortgage_interest]

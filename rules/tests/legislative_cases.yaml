@@ -1,0 +1,126 @@
+# Legislative test cases (OpenFisca-style). Each case is a worked example that a
+# legal reviewer can check by hand. A rule change cannot merge unless every case
+# passes (Annex A5). Expected outputs are compared as exact decimals.
+
+# --- PIT under the Nigeria Tax Act 2025 -------------------------------------
+- name: Income within the zero-rate band pays nothing
+  calculator: pit
+  input: {tax_year: 2026, annual_gross_income: 800000}
+  output: {chargeable_income: "800000.00", annual_tax: "0.00"}
+
+- name: Income at the top of the second band
+  calculator: pit
+  input: {tax_year: 2026, annual_gross_income: 3000000}
+  # 2,200,000 x 15% = 330,000
+  output: {annual_tax: "330000.00", monthly_tax: "27500.00"}
+
+- name: Income at the top of the third band
+  calculator: pit
+  input: {tax_year: 2026, annual_gross_income: 12000000}
+  # 330,000 + 9,000,000 x 18% = 1,950,000
+  output: {annual_tax: "1950000.00"}
+
+- name: Rent relief is capped and pension is deducted
+  calculator: pit
+  input:
+    tax_year: 2026
+    annual_gross_income: 6000000
+    annual_rent_paid: 3000000
+    pension: 480000
+  # relief = min(20% x 3,000,000, 500,000) = 500,000
+  # chargeable = 6,000,000 - 480,000 - 500,000 = 5,020,000
+  # tax = 330,000 + 2,020,000 x 18% = 693,600
+  output:
+    rent_relief: "500000.00"
+    chargeable_income: "5020000.00"
+    annual_tax: "693600.00"
+    monthly_tax: "57800.00"
+
+- name: Income in the top band
+  calculator: pit
+  input: {tax_year: 2026, annual_gross_income: 60000000}
+  # 10,430,000 to 50m + 10,000,000 x 25% = 12,930,000
+  output: {annual_tax: "12930000.00"}
+
+# --- PIT under PITA (tax years to 2025) ---------------------------------------
+- name: PITA with consolidated relief allowance
+  calculator: pit
+  input: {tax_year: 2025, annual_gross_income: 5000000, pension: 400000}
+  # CRA = max(200,000, 50,000) + 1,000,000 = 1,200,000
+  # taxable = 5,000,000 - 400,000 - 1,200,000 = 3,400,000
+  # tax = 560,000 to 3.2m + 200,000 x 24% = 608,000
+  output: {chargeable_income: "3400000.00", annual_tax: "608000.00"}
+
+- name: PITA minimum tax applies to low income
+  calculator: pit
+  input: {tax_year: 2025, annual_gross_income: 300000}
+  # computed 2,800 < minimum 1% x 300,000 = 3,000
+  output: {annual_tax: "3000.00", minimum_tax_applied: true}
+
+# --- CIT and development levy ----------------------------------------------------
+- name: Small company pays neither CIT nor levy
+  calculator: cit
+  input: {tax_year: 2026, annual_turnover: 80000000, fixed_assets: 50000000, total_profits: 20000000}
+  output: {is_small_company: true, cit: "0.00", development_levy: "0.00", total_tax: "0.00"}
+
+- name: Large company pays CIT and levy on different bases
+  calculator: cit
+  input:
+    tax_year: 2026
+    annual_turnover: 500000000
+    fixed_assets: 300000000
+    total_profits: 100000000
+    assessable_profits: 120000000
+  output: {is_small_company: false, cit: "30000000.00", development_levy: "4800000.00", total_tax: "34800000.00"}
+
+- name: Professional services firm cannot be small
+  calculator: cit
+  input:
+    tax_year: 2026
+    annual_turnover: 90000000
+    fixed_assets: 10000000
+    total_profits: 10000000
+    professional_services: true
+  output: {is_small_company: false, cit: "3000000.00", development_levy: "400000.00"}
+
+# --- VAT --------------------------------------------------------------------------
+- name: Standard-rated, amount excludes VAT
+  calculator: vat
+  input: {supply_date: "2026-03-01", amount: 100000, category: standard}
+  output: {net_amount: "100000.00", vat: "7500.00", gross_amount: "107500.00"}
+
+- name: Standard-rated, amount includes VAT
+  calculator: vat
+  input: {supply_date: "2026-03-01", amount: 107500, category: standard, amount_includes_vat: true}
+  output: {net_amount: "100000.00", vat: "7500.00"}
+
+- name: Zero-rated supply
+  calculator: vat
+  input: {supply_date: "2026-03-01", amount: 50000, category: zero_rated}
+  output: {vat: "0.00", gross_amount: "50000.00"}
+
+# --- WHT --------------------------------------------------------------------------
+- name: Professional fees to a company with a TIN
+  calculator: wht
+  input: {payment_date: "2026-03-01", payment_type: professional_fees, recipient_type: corporate, amount: 1000000}
+  output: {rate: "0.05", wht: "50000.00", net_payment: "950000.00"}
+
+- name: No TIN doubles the rate
+  calculator: wht
+  input: {payment_date: "2026-03-01", payment_type: professional_fees, recipient_type: corporate, amount: 1000000, recipient_has_tin: false}
+  output: {rate: "0.10", wht: "100000.00"}
+
+- name: No-TIN surcharge does not apply to dividends
+  calculator: wht
+  input: {payment_date: "2026-03-01", payment_type: dividends_interest, recipient_type: corporate, amount: 1000000, recipient_has_tin: false}
+  output: {rate: "0.10", wht: "100000.00"}
+
+- name: No-TIN surcharge is capped
+  calculator: wht
+  input: {payment_date: "2026-03-01", payment_type: rent, recipient_type: non_corporate, amount: 2000000, recipient_has_tin: false}
+  output: {rate: "0.20", wht: "400000.00"}
+
+- name: Small company payer below the ceiling deducts nothing
+  calculator: wht
+  input: {payment_date: "2026-03-01", payment_type: supply_of_goods, recipient_type: corporate, amount: 1500000, payer_is_small_company: true}
+  output: {exempt: true, wht: "0.00"}

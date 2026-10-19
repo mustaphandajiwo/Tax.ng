@@ -1,0 +1,77 @@
+# Reform guide hub (LAW-04). One guide per major change, each linked to the
+# provisions it explains and the calculator that applies it.
+# Guides follow the same no-figures rule as provisions: numbers are rendered
+# from the rules engine via `parameters` at display time.
+# `translations` holds reviewed summaries (CH-04). Empty until a reviewer
+# approves a translation; the UI shows a language switch only when present.
+
+- id: employees-2026
+  title: What changed for employees in 2026
+  summary: New tax bands, no consolidated relief allowance, and a zero-rate first band.
+  applies_from: 2026-01-01
+  audience: [employee, payroll]
+  calculator: pit-compare
+  provisions: [nta2025.pit.rates, nta2025.pit.deductions, pita.rates, pita.cra]
+  parameters: [pit.nta2025.rates]
+  body:
+    - From 1 January 2026, employment income is taxed under the Nigeria Tax Act 2025. The Personal Income Tax Act bands and the consolidated relief allowance no longer apply to new tax years.
+    - The first band of chargeable income is taxed at a zero rate. Many lower earners will see their PAYE fall to nothing. Higher earners face a top rate above the old one, so the net effect depends on income level and on the deductions each person can claim.
+    - Pension, National Housing Fund contributions, life insurance premiums and mortgage interest on an owner-occupied home remain deductible. Keep evidence of each.
+    - Use the old-versus-new comparison to see the change for a given salary.
+  translations: {}
+
+- id: rent-relief
+  title: Rent relief explained
+  summary: Tenants can deduct part of the rent they pay, up to an annual cap.
+  applies_from: 2026-01-01
+  audience: [employee, individual]
+  calculator: pit
+  provisions: [nta2025.pit.rent_relief]
+  parameters: [pit.nta2025.rent_relief.rate, pit.nta2025.rent_relief.cap]
+  body:
+    - Rent relief replaces part of what the consolidated relief allowance used to do for tenants. It applies only to rent paid on the home the individual lives in.
+    - The relief is a share of annual rent paid, capped at a fixed amount per year. Employers applying it through PAYE will ask for evidence, such as a tenancy agreement and receipts.
+    - Homeowners do not claim rent relief, but may deduct mortgage interest on an owner-occupied home.
+  translations: {}
+
+- id: small-companies
+  title: Small companies and the zero rate
+  summary: Which companies pay no CIT or development levy, and the tests they must meet.
+  applies_from: 2026-01-01
+  audience: [sme]
+  calculator: cit
+  provisions: [nta2025.cit.small_company, nta2025.cit.rate]
+  parameters:
+    - cit.small_company.turnover_ceiling
+    - cit.small_company.fixed_assets_ceiling
+  body:
+    - A small company meets two tests at once. Its annual gross turnover is at or below the turnover ceiling, and its total fixed assets are at or below the fixed assets ceiling. Failing either test means the standard rate applies.
+    - Small companies pay companies income tax at a zero rate and are outside the development levy. They still register, keep records and file returns.
+    - Whether professional services firms can qualify is pending legal review. The calculator flags this when the box is ticked.
+  translations: {}
+
+- id: development-levy
+  title: The development levy
+  summary: One levy on assessable profits replaces four earlier levies.
+  applies_from: 2026-01-01
+  audience: [sme, corporate]
+  calculator: cit
+  provisions: [nta2025.development_levy]
+  parameters: [cit.development_levy.rate]
+  body:
+    - The development levy is charged on the assessable profits of companies other than small companies and non-resident companies.
+    - It replaces the tertiary education tax, the NITDA levy, the NASENI levy and the Police Trust Fund levy, which were separate charges with separate bases.
+  translations: {}
+
+- id: vat-basics
+  title: VAT under the new Act
+  summary: The standard rate, zero-rated supplies and exempt supplies.
+  applies_from: 2026-01-01
+  audience: [sme, corporate]
+  calculator: vat
+  provisions: [nta2025.vat.rate, nta2025.vat.zero_rated, nta2025.vat.exempt]
+  parameters: [vat.standard_rate]
+  body:
+    - Taxable supplies carry VAT at the standard rate. Zero-rated supplies carry VAT at a zero rate, which normally lets the supplier recover input VAT. Exempt supplies sit outside VAT, and input VAT on them is generally not recoverable.
+    - Basic food items, medical and pharmaceutical products, educational materials and exported services are zero-rated.
+  translations: {}
