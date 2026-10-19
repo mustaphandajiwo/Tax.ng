@@ -6,7 +6,8 @@ import unittest
 from decimal import Decimal
 
 from taxng.ai import Assistant, Draft, TemplateProvider, ToolCall, classify, guard
-from taxng.services import build_services
+
+from .helpers import make_services
 
 
 class Classify(unittest.TestCase):
@@ -55,11 +56,11 @@ class BadProvider(TemplateProvider):
 class Pipeline(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.services = build_services(database=":memory:")
+        cls.services = make_services()
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls.services.store.close()
+        cls.services.db.close()
 
     def test_salary_question_uses_calculator_tool(self) -> None:
         r = self.services.assistant.answer("How much PAYE on a salary of ₦6m?")

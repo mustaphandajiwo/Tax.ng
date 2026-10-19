@@ -70,6 +70,16 @@ def _date(value: Any) -> dt.date:
     return value if isinstance(value, dt.date) else dt.date.fromisoformat(str(value))
 
 
+def _load_all(content_dir: Path, name: str) -> list[dict[str, Any]]:
+    """Core file plus any ``<name>.d/*.yaml`` additions, in file-name order."""
+    items: list[dict[str, Any]] = list(yaml.safe_load((content_dir / f"{name}.yaml").read_text()) or [])
+    extra_dir = content_dir / f"{name}.d"
+    if extra_dir.is_dir():
+        for path in sorted(extra_dir.glob("*.yaml")):
+            items.extend(yaml.safe_load(path.read_text()) or [])
+    return items
+
+
 def _check_no_figures(where: str, text: str) -> None:
     """Content must not state figures; they come from the rules engine (CALC-07)."""
     if _FIGURE.search(text):
@@ -85,7 +95,7 @@ class Library:
     @classmethod
     def load(cls, content_dir: Path, tree: ParameterTree) -> "Library":
         provisions: dict[str, Provision] = {}
-        for raw in yaml.safe_load((content_dir / "provisions.yaml").read_text()):
+        for raw in _load_all(content_dir, "provisions"):
             p = Provision(
                 id=raw["id"],
                 instrument=raw["instrument"],
@@ -108,7 +118,7 @@ class Library:
             provisions[p.id] = p
 
         guides: dict[str, Guide] = {}
-        for raw in yaml.safe_load((content_dir / "guides.yaml").read_text()):
+        for raw in _load_all(content_dir, "guides"):
             g = Guide(
                 id=raw["id"],
                 title=raw["title"],
@@ -138,7 +148,7 @@ class Library:
                 source_url=raw["source_url"],
                 sample=bool(raw.get("sample", False)),
             )
-            for raw in yaml.safe_load((content_dir / "news.yaml").read_text())
+            for raw in _load_all(content_dir, "news")
         ]
         news.sort(key=lambda n: n.date, reverse=True)
         return cls(provisions, guides, news)

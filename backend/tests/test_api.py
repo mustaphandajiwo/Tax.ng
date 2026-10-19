@@ -11,27 +11,30 @@ import yaml
 from taxng.api.handlers import Request, dispatch
 from taxng.config import CONTENT_DIR
 from taxng.legal import ContentError, Library
-from taxng.services import build_services
+from taxng.db import Database
 from taxng.store import Store
+
+from .helpers import make_services
 
 
 class Api(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.s = build_services(database=":memory:")
+        cls.s = make_services()
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls.s.store.close()
+        cls.s.db.close()
 
     def call(self, method: str, path: str, body: dict | None = None, query: dict | None = None):
         return dispatch(self.s, Request(method, path, query or {}, body or {}))
 
-    def test_meta_lists_phase_one_nav_only(self) -> None:
+    def test_file_and_pay_hidden_until_filing_is_authorised(self) -> None:
         status, body = self.call("GET", "/api/meta")
         self.assertEqual(status, 200)
         labels = [n["label"] for n in body["nav"]]
-        self.assertNotIn("File & Pay", labels)  # PRD section 5: appears only in Phase 4
+        self.assertNotIn("File & Pay", labels)  # PRD section 5: only once an authorised filing adapter is live
+        self.assertIn("Check My Tax Health", labels)
         self.assertEqual(body["owner"], "Astound Innovation Hub")
 
     def test_calculate_and_validation(self) -> None:
@@ -65,7 +68,9 @@ class Api(unittest.TestCase):
 
 class StoreTests(unittest.TestCase):
     def test_unsubscribe_needs_valid_token(self) -> None:
-        store = Store(":memory:", "secret")
+        db = Database(":memory:")
+        db.migrate()
+        store = Store(db, "secret")
         self.addCleanup(store.close)
         token = store.subscribe("b@example.com", consent=True, consent_text="ok")
         self.assertFalse(store.unsubscribe("b@example.com", "wrong"))
@@ -73,11 +78,13 @@ class StoreTests(unittest.TestCase):
         self.assertFalse(store.is_subscribed("b@example.com"))
 
     def test_event_props_are_filtered(self) -> None:
-        store = Store(":memory:", "secret")
+        db = Database(":memory:")
+        db.migrate()
+        store = Store(db, "secret")
         self.addCleanup(store.close)
         store.record_event("calculator_completed", {"calculator": "pit", "email": "leak@example.com"})
-        row = store._conn.execute("SELECT props FROM events").fetchone()
-        self.assertNotIn("leak", row[0])
+        row = store.db.one("SELECT props FROM events")
+        self.assertNotIn("leak", row["props"])
 
 
 class ContentIntegrity(unittest.TestCase):
@@ -88,8 +95,8 @@ class ContentIntegrity(unittest.TestCase):
         (tmp / "provisions.yaml").write_text(yaml.safe_dump(provisions))
         for name in ("guides.yaml", "news.yaml"):
             (tmp / name).write_text((CONTENT_DIR / name).read_text())
-        services = build_services(database=":memory:")
-        self.addCleanup(services.store.close)
+        services = make_services()
+        self.addCleanup(services.db.close)
         with self.assertRaises(ContentError):
             Library.load(tmp, services.tree)
 

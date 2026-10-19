@@ -35,6 +35,9 @@ export function Layout({ meta, path, children }: { meta?: Meta; path: string; ch
                 {n.label}
               </Link>
             ))}
+            <a className="nav__signin" href="/app/">
+              Sign in
+            </a>
           </nav>
         </div>
       </header>
@@ -48,6 +51,15 @@ export function Layout({ meta, path, children }: { meta?: Meta; path: string; ch
       </main>
       <footer className="footer">
         <div className="wrap footer__inner">
+          {meta && meta.footer_nav.length > 0 && (
+            <nav className="footer__nav" aria-label="More">
+              {meta.footer_nav.map((n) => (
+                <Link key={n.id} to={n.path}>
+                  {n.label}
+                </Link>
+              ))}
+            </nav>
+          )}
           <p>
             © 2026 {meta?.owner ?? "Astound Innovation Hub"}. tax.ng is owned and licensed by{" "}
             {meta?.owner ?? "Astound Innovation Hub"}.

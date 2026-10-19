@@ -10,83 +10,21 @@ Money values in responses are decimal strings (e.g. "330000.00"), never floats.
 from __future__ import annotations
 
 import datetime as dt
-import re
-from collections.abc import Callable
-from dataclasses import dataclass, field
 from typing import Any
 
 from ..calculators import CALCULATORS, InputError, compare_pit, payment_types
 from ..calculators.pit import DEDUCTIONS
 from ..calculators.vat import CATEGORIES
+from ..features import nav_for
 from ..legal import Guide, Provision
-from ..rules import ENGINE_VERSION, ParameterError
+from ..rules import ENGINE_VERSION
 from ..services import Services
-from ..store import StoreError
+from .router import NotFound, Request, dispatch, route  # noqa: F401  (re-exported for callers and tests)
 
-NAV = [
-    {"id": "reform", "label": "New Tax Law 2026", "path": "/reform"},
-    {"id": "calculators", "label": "Calculators", "path": "/calculators"},
-    {"id": "laws", "label": "Laws & Regulations", "path": "/laws"},
-    {"id": "news", "label": "Tax News", "path": "/news"},
-    {"id": "ask", "label": "Ask Tax AI", "path": "/ask"},
-    {"id": "newsletter", "label": "Newsletter", "path": "/newsletter"},
-    {"id": "about", "label": "About & Ownership", "path": "/about"},
-]
 CONSENT_TEXT = (
     "I agree to receive the weekly Nigerian Tax Brief from tax.ng (Astound Innovation Hub). "
     "I can unsubscribe at any time."
 )
-
-
-@dataclass
-class Request:
-    method: str
-    path: str
-    query: dict[str, str] = field(default_factory=dict)
-    body: dict[str, Any] = field(default_factory=dict)
-
-
-class NotFound(LookupError):
-    pass
-
-
-Handler = Callable[[Services, Request, dict[str, str]], tuple[int, Any]]
-_ROUTES: list[tuple[str, re.Pattern[str], Handler]] = []
-
-
-def route(method: str, pattern: str) -> Callable[[Handler], Handler]:
-    regex = re.compile("^" + re.sub(r"\{(\w+)\}", r"(?P<\1>[A-Za-z0-9_.\-]+)", pattern) + "$")
-
-    def register(fn: Handler) -> Handler:
-        _ROUTES.append((method, regex, fn))
-        return fn
-
-    return register
-
-
-def dispatch(services: Services, request: Request) -> tuple[int, Any]:
-    allowed: list[str] = []
-    for method, regex, fn in _ROUTES:
-        match = regex.match(request.path)
-        if not match:
-            continue
-        if method != request.method:
-            allowed.append(method)
-            continue
-        try:
-            return fn(services, request, match.groupdict())
-        except InputError as exc:
-            return 422, {"error": "invalid_input", "fields": exc.errors}
-        except StoreError as exc:
-            fieldname, _, message = str(exc).partition(": ")
-            return 422, {"error": "invalid_input", "fields": {fieldname: message}}
-        except ParameterError as exc:
-            return 422, {"error": "rule_not_in_force", "message": str(exc)}
-        except NotFound as exc:
-            return 404, {"error": "not_found", "message": str(exc)}
-    if allowed:
-        return 405, {"error": "method_not_allowed", "allowed": allowed}
-    return 404, {"error": "not_found", "message": f"No route for {request.path}"}
 
 
 # ------------------------------------------------------------------- helpers
@@ -175,7 +113,10 @@ def meta(services: Services, request: Request, params: dict[str, str]) -> tuple[
         "owner": "Astound Innovation Hub",
         "rules_version": tree.version,
         "engine_version": ENGINE_VERSION,
-        "nav": NAV,
+        "nav": nav_for(services, "header"),
+        "footer_nav": nav_for(services, "footer"),
+        "app_nav": nav_for(services, "app"),
+        "demo_mode": services.demo_mode,
         "pit_deductions": [{"id": k, "label": v} for k, v in DEDUCTIONS.items()],
         "vat_categories": CATEGORIES,
         "wht_payment_types": wht_types,

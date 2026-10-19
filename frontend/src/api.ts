@@ -1,5 +1,8 @@
 // Typed client for the tax.ng API. Mirrors backend/taxng/api/handlers.py.
 // Money values are decimal strings ("330000.00"); never parse them for arithmetic.
+import { ApiError, request } from "./http";
+
+export { ApiError };
 
 export type Money = string;
 export type ReviewStatus = "unverified" | "secondary_source" | "legal_approved";
@@ -119,35 +122,24 @@ export interface Meta {
   owner: string;
   rules_version: string;
   engine_version: string;
-  nav: { id: string; label: string; path: string }[];
+  nav: NavItem[];
+  footer_nav: NavItem[];
+  app_nav: NavItem[];
+  demo_mode: boolean;
   pit_deductions: { id: string; label: string }[];
   vat_categories: string[];
   wht_payment_types: { id: string; label: string; recipients: string[] }[];
   consent_text: string;
 }
 
-export class ApiError extends Error {
-  constructor(
-    public status: number,
-    message: string,
-    public fields: Record<string, string> = {},
-  ) {
-    super(message);
-  }
-}
-
-async function request<T>(method: "GET" | "POST", path: string, body?: unknown): Promise<T> {
-  const res = await fetch(path, {
-    method,
-    headers: body === undefined ? {} : { "Content-Type": "application/json" },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  const data: unknown = await res.json().catch(() => ({}));
-  if (!res.ok) {
-    const err = data as { message?: string; error?: string; fields?: Record<string, string> };
-    throw new ApiError(res.status, err.message ?? err.error ?? `Request failed (${res.status})`, err.fields);
-  }
-  return data as T;
+export interface NavItem {
+  id: string;
+  label: string;
+  path: string;
+  phase: number;
+  placement: "header" | "footer" | "app";
+  requires_adapter: string | null;
+  staff_only: boolean;
 }
 
 export const api = {

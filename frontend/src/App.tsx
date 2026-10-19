@@ -4,13 +4,14 @@ import { Layout } from "./components/Layout";
 import { Loading, useLoad } from "./components/ui";
 import { CalculatorIndex, CitCalculator, CompareCalculator, PitCalculator, VatCalculator, WhtCalculator } from "./pages/calculators";
 import { About, GuidePage, Home, LawPage, Laws, News, NotFound, Reform } from "./pages/content";
+import { siteModules } from "./modules/registry";
 import { Ask, Newsletter } from "./pages/interactive";
 import { match, useRoute } from "./router";
 
 type Render = (params: Record<string, string>, meta: Meta) => ReactNode;
 
-// Phase 1 routes only (PRD section 5). Later-phase pages are added with their phase.
-const ROUTES: [string, Render][] = [
+// Core public routes. Feature modules add theirs through modules/registry.ts.
+const CORE_ROUTES: [string, Render][] = [
   ["/", () => <Home />],
   ["/reform", () => <Reform />],
   ["/reform/:id", (p) => <GuidePage id={p.id} />],
@@ -27,6 +28,8 @@ const ROUTES: [string, Render][] = [
   ["/newsletter", (_, meta) => <Newsletter meta={meta} />],
   ["/about", () => <About />],
 ];
+
+const ROUTES: [string, Render][] = [...CORE_ROUTES, ...siteModules.flatMap((m) => m.routes)];
 
 function render(path: string, meta: Meta): ReactNode {
   for (const [pattern, view] of ROUTES) {

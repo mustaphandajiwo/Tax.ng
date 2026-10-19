@@ -7,13 +7,18 @@ const watch = process.argv.includes("--watch");
 
 rmSync("dist", { recursive: true, force: true });
 mkdirSync("dist/assets", { recursive: true });
+mkdirSync("dist/app", { recursive: true });
 cpSync("public/index.html", "dist/index.html");
+cpSync("public/app.html", "dist/app/index.html");
 cpSync("src/styles.css", "dist/assets/styles.css");
 
 const options = {
-  entryPoints: ["src/main.tsx"],
+  // Two bundles: the public site and the signed-in app (ADR-06).
+  entryPoints: { site: "src/main.tsx", app: "src/app/main.tsx" },
   bundle: true,
-  outfile: "dist/assets/app.js",
+  outdir: "dist/assets",
+  splitting: true,
+  chunkNames: "chunks/[name]-[hash]",
   format: "esm",
   target: "es2022",
   jsx: "automatic",
