@@ -36,7 +36,7 @@ def load_catalogues(content_dir: Path) -> dict[str, dict[str, Any]]:
     base = content_dir / "i18n"
     catalogues: dict[str, dict[str, Any]] = {}
     for path in sorted(base.glob("*.yaml")) if base.is_dir() else []:
-        raw = yaml.safe_load(path.read_text()) or {}
+        raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
         lang = raw["lang"]
         strings = raw.get("strings") or {}
         drafts: dict[str, str] = {}

@@ -15,7 +15,7 @@ D = Decimal
 
 def tree_from(yaml_text: str) -> ParameterTree:
     tmp = Path(tempfile.mkdtemp())
-    (tmp / "t.yaml").write_text(textwrap.dedent(yaml_text))
+    (tmp / "t.yaml").write_text(textwrap.dedent(yaml_text), encoding="utf-8")
     return ParameterTree.from_directory(tmp)
 
 

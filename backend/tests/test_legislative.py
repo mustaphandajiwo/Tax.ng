@@ -17,7 +17,7 @@ CASES_DIR = RULES_DIR / "tests"
 def _load_cases() -> list[dict]:
     cases: list[dict] = []
     for path in sorted(CASES_DIR.glob("*.yaml")):
-        for case in yaml.safe_load(path.read_text()) or []:
+        for case in yaml.safe_load(path.read_text(encoding="utf-8")) or []:
             case["_file"] = path.name
             cases.append(case)
     return cases

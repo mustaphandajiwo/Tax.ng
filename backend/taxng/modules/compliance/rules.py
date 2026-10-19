@@ -224,7 +224,7 @@ class ObligationRules:
         conditions = Conditions(tree)
         items: list[Obligation] = []
         for path in sorted(root.glob("*.yaml")):
-            for i, raw in enumerate(yaml.safe_load(path.read_text()) or []):
+            for i, raw in enumerate(yaml.safe_load(path.read_text(encoding="utf-8")) or []):
                 items.append(cls._parse(raw, f"{path.name}[{i}]", conditions))
         by_id: dict[str, list[Obligation]] = {}
         for ob in items:

@@ -231,9 +231,9 @@ class Cpd(AcademyCase):
         src = self.services.content_dir / "academy"
         shutil.copytree(src, tmp / "academy")
         path = tmp / "academy" / "courses" / f"{FREE}.yaml"
-        raw = yaml.safe_load(path.read_text())
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         raw["cpd"] = {"body": "CITN", "hours": 3}
-        path.write_text(yaml.safe_dump(raw))
+        path.write_text(yaml.safe_dump(raw), encoding="utf-8")
         fake = SimpleNamespace(content_dir=tmp, tree=self.services.tree, library=self.services.library)
         with self.assertRaises(ContentError):
             load_catalogue(fake)  # type: ignore[arg-type]
@@ -242,9 +242,9 @@ class Cpd(AcademyCase):
         tmp = Path(tempfile.mkdtemp())
         shutil.copytree(self.services.content_dir / "academy", tmp / "academy")
         path = tmp / "academy" / "courses" / f"{FREE}.yaml"
-        raw = yaml.safe_load(path.read_text())
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         raw["modules"][0]["lessons"][0]["body"].append("The top rate is 25%.")
-        path.write_text(yaml.safe_dump(raw))
+        path.write_text(yaml.safe_dump(raw), encoding="utf-8")
         with self.assertRaises(ContentError):
             load_catalogue(SimpleNamespace(content_dir=tmp, tree=self.services.tree, library=self.services.library))  # type: ignore[arg-type]
 

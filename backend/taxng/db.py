@@ -61,7 +61,7 @@ class Database:
                 "CREATE TABLE IF NOT EXISTS schema_migrations (name TEXT PRIMARY KEY, sha256 TEXT NOT NULL, applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)"
             )
             for path in schema_files():
-                sql = path.read_text()
+                sql = path.read_text(encoding="utf-8")
                 digest = hashlib.sha256(sql.encode()).hexdigest()
                 name = path.relative_to(PACKAGE_DIR).as_posix()
                 row = self._conn.execute("SELECT sha256 FROM schema_migrations WHERE name = ?", (name,)).fetchone()

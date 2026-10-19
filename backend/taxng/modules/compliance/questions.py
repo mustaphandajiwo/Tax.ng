@@ -96,7 +96,7 @@ class QuestionBank:
     # ------------------------------------------------------------------ loading
     @classmethod
     def from_file(cls, path: Path, conditions: Conditions, obligation_ids: set[str]) -> QuestionBank:
-        raw = yaml.safe_load(path.read_text()) or {}
+        raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
         seen: set[str] = set()
 
         def unique(qid: str) -> str:

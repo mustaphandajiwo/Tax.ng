@@ -221,8 +221,8 @@ class Localisation(ServicesTestCase):
     def test_content_cannot_mark_translation_approved(self) -> None:
         tmp = Path(tempfile.mkdtemp())
         (tmp / "i18n").mkdir()
-        (tmp / "i18n" / "en.yaml").write_text("lang: en\nname: English\nstrings:\n  button.send: Send\n")
-        (tmp / "i18n" / "ha.yaml").write_text("lang: ha\nname: Hausa\nstrings:\n  button.send: {text: Aika, status: approved}\n")
+        (tmp / "i18n" / "en.yaml").write_text("lang: en\nname: English\nstrings:\n  button.send: Send\n", encoding="utf-8")
+        (tmp / "i18n" / "ha.yaml").write_text("lang: ha\nname: Hausa\nstrings:\n  button.send: {text: Aika, status: approved}\n", encoding="utf-8")
         with self.assertRaises(ContentError):
             load_catalogues(tmp)
 

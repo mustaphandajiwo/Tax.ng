@@ -142,7 +142,7 @@ def load_catalogue(services: Services) -> tuple[dict[str, Course], dict[str, dic
     base: Path = services.content_dir / "academy"
     trainers: dict[str, dict[str, Any]] = {}
     if (base / "trainers.yaml").exists():
-        for t in yaml.safe_load((base / "trainers.yaml").read_text()) or []:
+        for t in yaml.safe_load((base / "trainers.yaml").read_text(encoding="utf-8")) or []:
             for para in t.get("bio", []):
                 _check_no_figures(f"trainer {t['id']}", para)
             trainers[t["id"]] = {
@@ -154,7 +154,7 @@ def load_catalogue(services: Services) -> tuple[dict[str, Course], dict[str, dic
             }
     courses: dict[str, Course] = {}
     for path in sorted((base / "courses").glob("*.yaml")) if (base / "courses").is_dir() else []:
-        raw = yaml.safe_load(path.read_text())
+        raw = yaml.safe_load(path.read_text(encoding="utf-8"))
         cid = raw["id"]
         if "cpd" in raw or "cpd_accreditation" in raw:
             raise ContentError(f"course {cid}: CPD claims come only from staff approval, not content (ACAD-02)")

@@ -37,7 +37,7 @@ def load_profiles(services: Services) -> dict[str, dict[str, Any]]:
     path = services.content_dir / "developer" / "erp_mappings.yaml"
     if not path.exists():
         return {}
-    profiles = (yaml.safe_load(path.read_text()) or {}).get("profiles", {})
+    profiles = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("profiles", {})
     for pid, p in profiles.items():
         missing = [f for f in ("external_id", "invoice_number", "description", "quantity", "unit_price") if f not in p.get("columns", {})]
         if missing:

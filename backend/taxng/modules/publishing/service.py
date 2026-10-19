@@ -90,7 +90,7 @@ TEXT_LIMITS = {
 # ------------------------------------------------------------------- policy
 @lru_cache(maxsize=4)
 def _policy_at(path: str) -> dict[str, Any]:
-    return yaml.safe_load(Path(path).read_text()) or {}
+    return yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
 
 
 def policy(services: Services) -> dict[str, Any]:

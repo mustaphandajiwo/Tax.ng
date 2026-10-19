@@ -275,7 +275,7 @@ class Advisers:
     # ------------------------------------------------------------------ placement
     def placement_terms(self) -> dict[str, Any]:
         path = Path(self.services.content_dir) / "compliance" / "advisory_placements.yaml"
-        terms = (yaml.safe_load(path.read_text()) or {}).get("sponsored_listing") or {}
+        terms = (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).get("sponsored_listing") or {}
         if "price_kobo" not in terms or "duration_days" not in terms:
             raise Conflict("Sponsored listing terms are not set")
         return terms

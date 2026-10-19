@@ -135,7 +135,7 @@ class EffectiveDating(unittest.TestCase):
 
     def load(self, text: str) -> ObligationRules:
         root = Path(tempfile.mkdtemp())
-        (root / "test.yaml").write_text(text)
+        (root / "test.yaml").write_text(text, encoding="utf-8")
         return ObligationRules.from_directory(root, self.tree)
 
     BASE = """

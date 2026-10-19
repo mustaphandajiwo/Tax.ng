@@ -50,7 +50,7 @@ def load_plans(services: Services) -> dict[str, dict[str, Any]]:
     path = services.content_dir / "billing" / "plans.yaml"
     if not path.exists():
         return {}
-    data = yaml.safe_load(path.read_text()) or {}
+    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     plans: dict[str, dict[str, Any]] = {}
     for plan in data.get("plans", []):
         if plan.get("price_status") not in ("placeholder", "approved"):

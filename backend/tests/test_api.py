@@ -90,11 +90,11 @@ class StoreTests(unittest.TestCase):
 class ContentIntegrity(unittest.TestCase):
     def test_content_with_a_figure_is_rejected(self) -> None:
         tmp = Path(tempfile.mkdtemp())
-        provisions = yaml.safe_load((CONTENT_DIR / "provisions.yaml").read_text())
+        provisions = yaml.safe_load((CONTENT_DIR / "provisions.yaml").read_text(encoding="utf-8"))
         provisions[0]["summary"] = "The rate is 15% for everyone."
-        (tmp / "provisions.yaml").write_text(yaml.safe_dump(provisions))
+        (tmp / "provisions.yaml").write_text(yaml.safe_dump(provisions), encoding="utf-8")
         for name in ("guides.yaml", "news.yaml"):
-            (tmp / name).write_text((CONTENT_DIR / name).read_text())
+            (tmp / name).write_text((CONTENT_DIR / name).read_text(encoding="utf-8"), encoding="utf-8")
         services = make_services()
         self.addCleanup(services.db.close)
         with self.assertRaises(ContentError):

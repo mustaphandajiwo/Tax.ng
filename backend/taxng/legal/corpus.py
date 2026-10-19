@@ -72,11 +72,11 @@ def _date(value: Any) -> dt.date:
 
 def _load_all(content_dir: Path, name: str) -> list[dict[str, Any]]:
     """Core file plus any ``<name>.d/*.yaml`` additions, in file-name order."""
-    items: list[dict[str, Any]] = list(yaml.safe_load((content_dir / f"{name}.yaml").read_text()) or [])
+    items: list[dict[str, Any]] = list(yaml.safe_load((content_dir / f"{name}.yaml").read_text(encoding="utf-8")) or [])
     extra_dir = content_dir / f"{name}.d"
     if extra_dir.is_dir():
         for path in sorted(extra_dir.glob("*.yaml")):
-            items.extend(yaml.safe_load(path.read_text()) or [])
+            items.extend(yaml.safe_load(path.read_text(encoding="utf-8")) or [])
     return items
 
 
