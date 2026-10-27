@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import { Figures } from "../components/Figures";
+import { Icon } from "../components/icons";
 import { Loading, Notice, ReviewBadge, useLoad } from "../components/ui";
 import { date } from "../format";
 import { http } from "../http";
@@ -18,63 +19,108 @@ const CALC_PATH: Record<string, string> = {
   "stamp-duty": "/calculators/stamp-duty",
 };
 
+const TOOLS: { path: string; label: string; icon: string }[] = [
+  { path: "/calculators/pit", label: "PAYE", icon: "paye" },
+  { path: "/calculators/pit-compare", label: "Old vs new", icon: "compare" },
+  { path: "/calculators/cit", label: "Company tax", icon: "company" },
+  { path: "/calculators/vat", label: "VAT", icon: "vat" },
+  { path: "/calculators/wht", label: "Withholding", icon: "wht" },
+  { path: "/calculators/cgt", label: "Capital gains", icon: "cgt" },
+  { path: "/calculators/stamp-duty", label: "Stamp duty", icon: "stamp" },
+  { path: "/calculators", label: "All tools", icon: "calc" },
+];
+
+// Home is a dashboard: ask, act, then catch up. No marketing hero.
 export function Home() {
   const guides = useLoad(() => api.guides(), []);
+  const news = useLoad(() => api.news(), []);
   return (
     <>
-      <section className="hero">
-        <p className="eyebrow">The 2025 tax reform</p>
-        <h1>The new tax law, explained and calculated.</h1>
-        <p className="lede">
-          From 1 January 2026, the Nigeria Tax Act 2025 sets new rules for PAYE, company tax and VAT. See what changed,
-          work out what you owe, and check the source for every figure.
-        </p>
-        <div className="hero__actions">
-          <Link to="/calculators/pit-compare" className="btn">
-            Compare my PAYE
-          </Link>
-          <Link to="/reform" className="btn btn--ghost">
-            What changed
-          </Link>
+      <h1 className="sr-only">tax.ng</h1>
+
+      <Link to="/ask" className="askbar">
+        <Icon name="search" />
+        <span>Ask a tax question</span>
+      </Link>
+
+      <section className="dash">
+        <h2 className="dash__title">Calculate</h2>
+        <div className="tools">
+          {TOOLS.map((t) => (
+            <Link key={t.path} to={t.path} className="tool">
+              <span className="tool__icon">
+                <Icon name={t.icon} />
+              </span>
+              <span className="tool__label">{t.label}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section>
-        <h2>Start with a calculator</h2>
-        <div className="cards">
-          <Link to="/calculators/pit" className="card card--link">
-            <h3>PAYE</h3>
-            <p>Monthly PAYE with rent relief.</p>
-          </Link>
-          <Link to="/calculators/cit" className="card card--link">
-            <h3>Company tax</h3>
-            <p>Are you a small company?</p>
-          </Link>
-          <Link to="/calculators/vat" className="card card--link">
-            <h3>VAT</h3>
-            <p>Add or extract VAT.</p>
-          </Link>
-          <Link to="/calculators/wht" className="card card--link">
-            <h3>Withholding tax</h3>
-            <p>What to deduct from a payment.</p>
+      <Link to="/health-check" className="promo">
+        <span className="promo__icon">
+          <Icon name="health" size={26} />
+        </span>
+        <span>
+          <strong>Check your tax health</strong>
+          <span className="small"> Ten questions. See what you may have missed under the 2026 rules.</span>
+        </span>
+        <Icon name="chevron" size={18} />
+      </Link>
+
+      <section className="dash">
+        <div className="dash__head">
+          <h2 className="dash__title">What changed in 2026</h2>
+          <Link to="/reform" className="small">
+            See all
           </Link>
         </div>
+        {guides.data ? (
+          <div className="carousel">
+            {guides.data.items.map((g) => (
+              <Link key={g.id} to={`/reform/${g.id}`} className="slide">
+                <span className="slide__date small">From {date(g.applies_from)}</span>
+                <strong>{g.title}</strong>
+                <span className="small muted">{g.summary}</span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Loading error={guides.error} />
+        )}
       </section>
 
-      <section>
-        <h2>Reform guides</h2>
-        {guides.data ? <GuideList items={guides.data.items} /> : <Loading error={guides.error} />}
+      <section className="dash">
+        <div className="dash__head">
+          <h2 className="dash__title">Tax news</h2>
+          <Link to="/news" className="small">
+            See all
+          </Link>
+        </div>
+        {news.data ? (
+          <ul className="rows">
+            {news.data.items.slice(0, 3).map((n) => (
+              <li key={n.id}>
+                <Link to="/news" className="row row--news">
+                  <span className="row__label">
+                    <span className="small muted">
+                      {n.section} · {date(n.date)}
+                    </span>
+                    <strong>{n.headline}</strong>
+                  </span>
+                  <span className="row__chevron">
+                    <Icon name="chevron" size={18} />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Loading error={news.error} />
+        )}
       </section>
 
       <AdSlot slot="home_sidebar" page="/" />
-
-      <section className="card ask-cta">
-        <h2>Ask Tax AI</h2>
-        <p>Ask a question in plain words. Answers cite the law, and every figure comes from the rules engine.</p>
-        <Link to="/ask" className="btn">
-          Ask a question
-        </Link>
-      </section>
     </>
   );
 }

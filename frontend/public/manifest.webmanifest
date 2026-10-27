@@ -1,0 +1,23 @@
+{
+  "name": "tax.ng",
+  "short_name": "tax.ng",
+  "description": "Nigerian tax, explained and calculated: PAYE, company tax, VAT and withholding tax under the 2025 reform, with the law behind every figure.",
+  "start_url": "/#/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbfaf7",
+  "theme_color": "#0b6e4f",
+  "lang": "en-NG",
+  "categories": ["finance", "business", "education"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "PAYE calculator", "url": "/#/calculators/pit" },
+    { "name": "Ask Tax AI", "url": "/#/ask" },
+    { "name": "Laws", "url": "/#/laws" }
+  ]
+}

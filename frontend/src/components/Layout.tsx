@@ -1,79 +1,103 @@
-import { useState, type ReactNode } from "react";
+// App shell: a top bar with a back button on nested screens, a bottom tab
+// bar on phones and a sidebar on wider screens. The website header, menu and
+// footer are gone; secondary destinations live on the More screen.
+import { type ReactNode } from "react";
 import type { Meta } from "../api";
 import { Link } from "../router";
+import { Icon } from "./icons";
+
+export const TABS = [
+  { id: "home", label: "Home", path: "/", icon: "home" },
+  { id: "calculate", label: "Calculate", path: "/calculators", icon: "calc" },
+  { id: "ask", label: "Ask AI", path: "/ask", icon: "ask" },
+  { id: "laws", label: "Laws", path: "/laws", icon: "laws" },
+  { id: "more", label: "More", path: "/more", icon: "more" },
+] as const;
+
+// Screens reached from More count as More for the active-tab highlight.
+function activeTab(path: string): string {
+  if (path === "/") return "home";
+  const root = `/${path.split("/")[1] ?? ""}`;
+  const tab = TABS.find((t) => t.path !== "/" && t.path === root);
+  return tab ? tab.id : "more";
+}
+
+// Parent screen for the back button, with the label the user knows it by.
+function parentOf(path: string, meta?: Meta): { to: string; label: string } | null {
+  const parts = path.split("/").filter(Boolean);
+  if (parts.length === 0) return null;
+  const tabRoot = TABS.find((t) => t.path === `/${parts[0]}`);
+  if (parts.length === 1) {
+    // A top-level screen that is not a tab goes back to More.
+    return tabRoot ? null : { to: "/more", label: "More" };
+  }
+  const to = `/${parts[0]}`;
+  const navItem = [...(meta?.nav ?? []), ...(meta?.footer_nav ?? [])].find((n) => n.path === to);
+  const label = tabRoot?.label ?? navItem?.label ?? "Back";
+  return { to, label };
+}
 
 export function Layout({ meta, path, children }: { meta?: Meta; path: string; children: ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const nav = meta?.nav ?? [];
+  const current = activeTab(path);
+  const parent = parentOf(path, meta);
   return (
-    <>
+    <div className="shell">
       <a className="skip" href="#main">
         Skip to content
       </a>
-      <header className="header">
-        <div className="wrap header__inner">
-          <Link to="/" className="brand" aria-label="tax.ng home">
-            tax<span>.ng</span>
-          </Link>
-          <button
-            type="button"
-            className="menu-toggle"
-            aria-expanded={open}
-            aria-controls="site-nav"
-            onClick={() => setOpen(!open)}
-          >
-            Menu
-          </button>
-          <nav id="site-nav" className={`nav${open ? " nav--open" : ""}`} aria-label="Main">
-            {nav.map((n) => (
-              <Link
-                key={n.id}
-                to={n.path}
-                aria-current={path === n.path || path.startsWith(`${n.path}/`) ? "page" : undefined}
-                onClick={() => setOpen(false)}
-              >
-                {n.label}
-              </Link>
-            ))}
-            <a className="nav__signin" href="/app/">
-              Sign in
-            </a>
-          </nav>
-        </div>
-      </header>
-      <div className="demo-bar" role="note">
-        <div className="wrap">
+
+      <aside className="rail" aria-label="Main">
+        <Link to="/" className="brand rail__brand" aria-label="tax.ng home">
+          tax<span>.ng</span>
+        </Link>
+        <nav className="rail__nav">
+          {TABS.map((t) => (
+            <Link key={t.id} to={t.path} className="rail__item" aria-current={current === t.id ? "page" : undefined}>
+              <Icon name={t.icon} />
+              <span>{t.label}</span>
+            </Link>
+          ))}
+        </nav>
+        <a className="rail__signin" href="/app/">
+          <Icon name="user" />
+          <span>Sign in</span>
+        </a>
+      </aside>
+
+      <div className="shell__body">
+        <header className={`topbar${parent ? "" : " topbar--root"}`}>
+          {parent ? (
+            <Link to={parent.to} className="topbar__back">
+              <Icon name="back" />
+              <span>{parent.label}</span>
+            </Link>
+          ) : (
+            <Link to="/" className="brand topbar__brand" aria-label="tax.ng home">
+              tax<span>.ng</span>
+            </Link>
+          )}
+          <a className="topbar__account" href="/app/" aria-label="Sign in">
+            <Icon name="user" />
+          </a>
+        </header>
+
+        <div className="demo-bar" role="note">
           Demo build. Rules come from secondary sources and are pending legal sign-off. Not for real tax decisions.
         </div>
+
+        <main id="main" className="screen" key={path}>
+          {children}
+        </main>
       </div>
-      <main id="main" className="wrap main">
-        {children}
-      </main>
-      <footer className="footer">
-        <div className="wrap footer__inner">
-          {meta && meta.footer_nav.length > 0 && (
-            <nav className="footer__nav" aria-label="More">
-              {meta.footer_nav.map((n) => (
-                <Link key={n.id} to={n.path}>
-                  {n.label}
-                </Link>
-              ))}
-            </nav>
-          )}
-          <p>
-            © 2026 {meta?.owner ?? "Astound Innovation Hub"}. tax.ng is owned and licensed by{" "}
-            {meta?.owner ?? "Astound Innovation Hub"}.
-          </p>
-          <p>
-            tax.ng is not a tax authority and does not act for one. Content is general information, not tax advice.
-          </p>
-          {meta && (
-            <p className="muted small">
-              Rules {meta.rules_version} · engine {meta.engine_version}
-            </p>
-          )}
-        </div>
-      </footer>
-    </>
+
+      <nav className="tabbar" aria-label="Main">
+        {TABS.map((t) => (
+          <Link key={t.id} to={t.path} className="tabbar__item" aria-current={current === t.id ? "page" : undefined}>
+            <Icon name={t.icon} />
+            <span>{t.label}</span>
+          </Link>
+        ))}
+      </nav>
+    </div>
   );
 }

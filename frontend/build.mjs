@@ -10,6 +10,10 @@ mkdirSync("dist/assets", { recursive: true });
 mkdirSync("dist/app", { recursive: true });
 cpSync("public/index.html", "dist/index.html");
 cpSync("public/app.html", "dist/app/index.html");
+// Installable public app: manifest, home-screen icons and the offline service worker.
+cpSync("public/manifest.webmanifest", "dist/manifest.webmanifest");
+cpSync("public/sw.js", "dist/sw.js");
+cpSync("public/icons", "dist/icons", { recursive: true });
 // One stylesheet: core styles plus each module's src/modules/<name>/<name>.css.
 const moduleCss = readdirSync("src/modules", { withFileTypes: true })
   .filter((d) => d.isDirectory() && existsSync(`src/modules/${d.name}/${d.name}.css`))

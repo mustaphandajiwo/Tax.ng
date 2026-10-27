@@ -6,6 +6,7 @@ import { CalculatorIndex, CitCalculator, CompareCalculator, PitCalculator, VatCa
 import { About, GuidePage, Home, LawPage, Laws, News, NotFound, Reform } from "./pages/content";
 import { siteModules } from "./modules/registry";
 import { Ask, Newsletter } from "./pages/interactive";
+import { More } from "./pages/more";
 import { match, useRoute } from "./router";
 
 type Render = (params: Record<string, string>, meta: Meta) => ReactNode;
@@ -27,6 +28,7 @@ const CORE_ROUTES: [string, Render][] = [
   ["/ask", () => <Ask />],
   ["/newsletter", (_, meta) => <Newsletter meta={meta} />],
   ["/about", () => <About />],
+  ["/more", (_, meta) => <More meta={meta} />],
 ];
 
 const ROUTES: [string, Render][] = [...CORE_ROUTES, ...siteModules.flatMap((m) => m.routes)];
