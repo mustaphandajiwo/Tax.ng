@@ -1,0 +1,35 @@
+# Private preview of tax.ng on Fly.io, separate from production (fly.toml).
+# Demo mode is ON: demo data is seeded and sign-in codes show on screen, so
+# never put real taxpayer data here. Deployed by .github/workflows/preview.yml.
+app = "taxng-preview"
+primary_region = "jnb"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  TAXNG_DEMO = "1"
+  TAXNG_DATA_DIR = "/data"
+
+[mounts]
+  source = "taxng_preview_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # Sleeps when idle to keep the preview near-free; first visit wakes it in a few seconds.
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    method = "GET"
+    path = "/api/meta"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

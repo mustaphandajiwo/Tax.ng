@@ -21,9 +21,14 @@ One-time setup (requires a Fly.io account with a card on file):
       TAXNG_MAIL_FROM="tax.ng <no-reply@tax.ng>"
     fly deploy
 
-Continuous deploys: add a `FLY_API_TOKEN` repository secret
-(`fly tokens create deploy`) and the `deploy` job in `.github/workflows/ci.yml`
-can run `flyctl deploy --remote-only` on pushes to `master` after tests pass.
+## Private preview (no terminal needed)
+
+`.github/workflows/preview.yml` deploys `fly.preview.toml` to
+`https://taxng-preview.fly.dev` on every push to the `preview` branch, or from
+Actions > preview > Run workflow. It creates the app and volume on first run and
+seeds demo data. Demo mode is on there: sign-in codes show on screen, so never
+use real taxpayer data. Needs one repository secret, `FLY_API_TOKEN`
+(Fly dashboard > Tokens > create an organisation token).
 
 ## Email (sign-in codes)
 

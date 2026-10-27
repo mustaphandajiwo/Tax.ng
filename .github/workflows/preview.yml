@@ -1,0 +1,49 @@
+name: preview
+
+# Deploys the private preview (fly.preview.toml) on every push to the
+# `preview` branch, or on demand from the Actions tab. Needs one repository
+# secret: FLY_API_TOKEN (a Fly.io organisation token).
+on:
+  push:
+    branches: [preview]
+  workflow_dispatch:
+
+concurrency:
+  group: preview
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      APP: taxng-preview
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the Fly.io token is set
+        run: |
+          if [ -z "$FLY_API_TOKEN" ]; then
+            echo "::error::Add a FLY_API_TOKEN repository secret (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Create the app and its volume on first run
+        run: |
+          if ! flyctl status -a "$APP" >/dev/null 2>&1; then
+            flyctl apps create "$APP" --org personal
+          fi
+          if ! flyctl volumes list -a "$APP" --json | grep -q taxng_preview_data; then
+            flyctl volumes create taxng_preview_data -a "$APP" --region jnb --size 1 --yes
+          fi
+
+      - name: Deploy (built remotely by Fly)
+        run: flyctl deploy --config fly.preview.toml --remote-only --ha=false
+
+      - name: Seed demo data (skips if already present)
+        run: flyctl ssh console -a "$APP" -C "runuser -u taxng -- python -m taxng seed"
+
+      - name: Preview address
+        run: echo "::notice::Preview is live at https://$APP.fly.dev"
