@@ -27,6 +27,10 @@ class NotConfigured(RuntimeError):
     """A production adapter was used before it was configured and authorised."""
 
 
+class ProviderUnavailable(RuntimeError):
+    """A configured production adapter's upstream provider failed or was unreachable."""
+
+
 class Adapter:
     kind: str = "generic"
     name: str = "adapter"

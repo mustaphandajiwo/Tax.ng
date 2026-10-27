@@ -12,6 +12,7 @@ errors to HTTP statuses:
     NotFound / NotFoundError                -> 404
     Conflict                                -> 409
     NotConfigured (production adapter)      -> 503 {"error": "integration_not_configured"}
+    ProviderUnavailable (upstream failure)  -> 503 {"error": "integration_unavailable"}
 
 The Starlette adapter (app.py) and the tests both call ``dispatch``.
 """
@@ -25,7 +26,7 @@ from typing import TYPE_CHECKING, Any
 
 from ..calculators import InputError
 from ..platform.access import Forbidden, NotFoundError, Principal, Unauthorized, principal_from_user
-from ..platform.adapters import NotConfigured
+from ..platform.adapters import NotConfigured, ProviderUnavailable
 from ..platform.auth import SESSION_COOKIE
 from ..platform.errors import Conflict, Invalid
 from ..rules import ParameterError
@@ -157,6 +158,8 @@ def dispatch(services: Services, request: Request) -> Reply:
             return Reply(409, {"error": "conflict", "message": str(exc)})
         except NotConfigured as exc:
             return Reply(503, {"error": "integration_not_configured", "message": str(exc)})
+        except ProviderUnavailable as exc:
+            return Reply(503, {"error": "integration_unavailable", "message": str(exc)})
         return result if isinstance(result, Reply) else Reply(result[0], result[1])
     if allowed:
         return Reply(405, {"error": "method_not_allowed", "allowed": allowed})

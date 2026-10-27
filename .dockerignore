@@ -1,0 +1,10 @@
+.git
+.github
+**/node_modules
+frontend/dist
+data
+**/__pycache__
+**/*.pyc
+backend/tests
+docs
+*.sqlite3

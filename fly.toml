@@ -1,0 +1,35 @@
+# Fly.io config for tax.ng. Johannesburg is the nearest Fly region to Nigeria.
+app = "taxng"
+primary_region = "jnb"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  TAXNG_DEMO = "0"
+  TAXNG_DATA_DIR = "/data"
+  TAXNG_ADAPTER_MESSAGING = "production"
+
+# SQLite lives on a persistent volume; without it every deploy wipes accounts.
+[mounts]
+  source = "taxng_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # One always-on machine: SQLite is single-writer, so do not scale out.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    method = "GET"
+    path = "/api/meta"
+    timeout = "5s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
